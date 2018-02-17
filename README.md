@@ -2,7 +2,7 @@
 Elephant
 
 
-Class ID: Test
+Class ID: Seadra
 
 SRS ID: CST126SRS03
 
