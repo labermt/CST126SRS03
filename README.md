@@ -20,3 +20,5 @@ Learn about biological simulations.
 Instructions: 
 
 Write code to GPS tag a lost elephant and simulate it finding the herd in a wildlife preserve. 
+
+You need to update the elephant.cpp file with an implementation to have your elephant find the herd. 
