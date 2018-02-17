@@ -2,7 +2,7 @@
 Elephant
 
 
-Class ID: 
+Class ID: Test
 
 SRS ID: CST126SRS03
 
