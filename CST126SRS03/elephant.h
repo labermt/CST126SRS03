@@ -50,6 +50,6 @@ private: // Available methods.
 	void move();
 
 public: // To be implemented methods. 
-	void tag(const GPS& gps);
+	void tag(GPS& gps);
 	void findHerd();
 };
