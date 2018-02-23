@@ -14,6 +14,7 @@ void Elephant::findHerd()
 		{
 			drink();
 		}
+		// adding comment for push test
 		// food isnt implemented yet apparently 
 		// if(food_ <= kMaxFood / 2 )
 		// {
