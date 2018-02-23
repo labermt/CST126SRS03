@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include <iostream>
-#include <cassert>
 #include "gps.h"
 #include "preserve.h"
 #include "elephant.h"
@@ -17,6 +16,34 @@ void Elephant::findHerd()
 	while (!foundHerd)
 	{
 		const auto direction = listen();
+		auto turn(direction);
+		move();
+
+
+		if (isHungry())
+		{
+			if (look(Turn::kForward) == Preserve::Feature::kBrush) // or kGrass
+				move();
+				eat();
+			else if (look(Turn::kForward) == Preserve::Feature::kBrush)
+
+			}
+		}
+
+		if (isThirsty())
+		{
+			while (look() != Preserve::Feature::kWater)
+			{
+				//turn until elephant is facing water. 
+				//case for no water bordering
+			}
+		}
+
+		if (isSleepy())
+		{
+			sleep();
+		}
 
 	}
+	
 }
