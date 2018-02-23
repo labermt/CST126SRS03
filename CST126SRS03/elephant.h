@@ -18,8 +18,8 @@ private:
 	static constexpr unsigned kMaxWater{ 200 }; // liters/day
 	static constexpr unsigned kMaxFood{ 200 }; // kg/day
 
-	unsigned clock_{}; // TODO: Make the clock run. 
-	unsigned awake_{};
+	unsigned elapsedTime_{}; // minutes
+	unsigned awake_{}; // minutes
 	unsigned water_{}; // [0, kMaxWater)
 
 	unsigned weight_; // [minWeight_,maxWeight_)
@@ -34,9 +34,18 @@ public:
 
 private:
 	static Preserve::Feature look(const Elephant& elephant);
+	void incrementTime(const unsigned minutes);
+	void decrementWater(const unsigned liters);
+	void decrementWeight(const unsigned kg);
+
+private:
+	bool isSleepy() const;
+	bool isThirsty() const;
+	bool isHungry() const;
 
 public:
 	GPS * getGps_() const;
+	unsigned getElapsedTime() const;
 
 private: // Available methods.
 	Direction getHeading(const Turn turn) const;
@@ -50,6 +59,6 @@ private: // Available methods.
 	void move();
 
 public: // To be implemented methods. 
-	void tag(const GPS& gps);
+	void tag(GPS& gps);
 	void findHerd();
 };
