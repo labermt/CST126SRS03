@@ -2,7 +2,7 @@
 Elephant
 
 
-Class ID: 
+Class ID: Phantump
 
 SRS ID: CST126SRS03
 
