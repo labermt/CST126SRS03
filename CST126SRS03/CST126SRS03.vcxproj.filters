@@ -50,7 +50,7 @@
     <ClCompile Include="preserve.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="elephant0.cpp">
+    <ClCompile Include="loxodonta.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
