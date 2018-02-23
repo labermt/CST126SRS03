@@ -29,7 +29,7 @@ Preserve::Feature Preserve::getFeature(const int lat, const int lng) const
 	{
 		result = feature_[lat][lng];
 	}
-
+	
 	return result;
 }
 
