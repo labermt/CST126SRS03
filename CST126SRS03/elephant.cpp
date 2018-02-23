@@ -10,16 +10,15 @@ void Elephant::findHerd()
 	{
 		auto heading = getHeading(Turn::kForward);
 		auto heard_dir = listen();
-		if(water_ <= kMaxWater / 2 )
+		if(isThirsty() && look() == Preserve::Feature::kWater )
 		{
 			drink();
 		}
-		// adding comment for push test
-		// food isnt implemented yet apparently 
-		// if(food_ <= kMaxFood / 2 )
-		// {
-		//	eat();
-		// }
+		
+		if(isHungry() && look() == Preserve::Feature::kGrass || look() == Preserve::Feature::kBrush )
+		{
+			eat();
+		}
 	}
 }
 
