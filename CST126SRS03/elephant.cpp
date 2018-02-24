@@ -94,7 +94,7 @@ void Elephant::findHerd()
 		}
 	}
 }
-
+//Sets Elephant GPS Tag to initial coordinates.
 void Elephant::tag(class GPS& gps)
 {
 	gps_ = &gps;
