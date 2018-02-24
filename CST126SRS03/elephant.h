@@ -59,6 +59,6 @@ private: // Student available methods.
 	void move();
 
 public: // Student to implement methods: 
-	void tag(GPS& gps);
+	void tag(GPS& gps); 
 	void findHerd();
 };

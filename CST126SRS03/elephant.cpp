@@ -1,4 +1,8 @@
 #include "stdafx.h"
 #include "elephant.h"
 
-//test test test 
+void Elephant::tag(GPS& gps)
+{
+	gps_ = &gps; 
+}
+
