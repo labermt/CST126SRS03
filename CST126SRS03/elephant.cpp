@@ -1,8 +1,11 @@
 #include "stdafx.h"
+<<<<<<< HEAD
 #include <iostream>
 #include <cassert>
 #include "gps.h"
 #include "preserve.h"
+=======
+>>>>>>> pr/4
 #include "elephant.h"
 
 void Elephant::tag( GPS& gps)

@@ -18,7 +18,8 @@ Preserve::Preserve():
 		{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kWater, Feature::kDirt,  Feature::kDirt,  Feature::kBrush, Feature::kRock },
 		{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kRock },
 		{ Feature::kRock, Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock, Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock }
-	} // TODO: Generate?
+	}, // TODO: Generate?
+	herd_(1, 5)
 {
 }
 
@@ -83,9 +84,10 @@ int Preserve::getHerdDirection(const Elephant& elephant) const
 
 	if (gpsPtr != nullptr)
 	{
-		const auto latDelta = herd_.getlat() - gpsPtr->getlat();
-		const auto lngDelta = herd_.getlng() - gpsPtr->getlng();
-		result = GPS::theta(lngDelta, latDelta);
+		const auto dx = herd_.getlng() - gpsPtr->getlng();
+		const auto dy = -(herd_.getlat() - gpsPtr->getlat());
+		const auto angle = 90- GPS::theta(dx, dy);
+		result = GPS::cardinal(angle); // TODO: Use cardinal compass coordinates?
 	}
 	return result;
 }

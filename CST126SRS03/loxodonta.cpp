@@ -208,13 +208,13 @@ void Elephant::eat()
 	}
 }
 
-void  Elephant::turn(const Turn turn)
+void Elephant::turn(const Turn turn)
 {
 	incrementTime(1);
 	heading_ = getHeading(turn);
 }
 
-void  Elephant::move()
+void Elephant::move()
 {
 	incrementTime(60);
 	decrementWater(20);
