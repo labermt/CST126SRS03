@@ -5,6 +5,10 @@
 
 #include "gps.h"
 
+GPS::GPS(const int lat, const int lng): lat_(lat), lng_(lng)
+{
+}
+
 void GPS::set(const int lat, const int lng)
 {
 	lat_ = lat;
@@ -65,7 +69,7 @@ void GPS::move(const int direction, const unsigned distance)
 
 int GPS::theta(const int x, const int y)
 {
-	Direction result = kNorth;
+	int result = kNorth;
 	if (x == 0)
 	{
 		if (y < 0)
@@ -77,16 +81,15 @@ int GPS::theta(const int x, const int y)
 	{
 		constexpr auto kPi{ 3.14159265358979323846 };
 
-		auto angle = atan(1.0 * y / x) * 180.0 / kPi;
+		result = std::lround(atan(1.0 * y / x) * 180.0 / kPi);
 		if (x < 0)
 		{
-			angle += 180;
+			result += 180;
 		}
 		else if (y < 0)
 		{
-			angle += 360;
+			result += 360;
 		}
-		result = cardinal(angle); // TODO: Improve GPS accuracy?
 	}
 
 	return result;
