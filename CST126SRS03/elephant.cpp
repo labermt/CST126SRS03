@@ -3,7 +3,7 @@
 
 void Elephant::tag(GPS& gps)
 {
-
+	GPS* getGps_();
 }
 
 
