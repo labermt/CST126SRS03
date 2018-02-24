@@ -125,7 +125,7 @@ Preserve::Feature Elephant::look() const
 	return result;
 }
 
-Direction Elephant::getHeading(const Turn turn) const
+Direction Elephant::getDirection(const Turn turn)
 {
 	auto theta{ 0 };
 
@@ -149,8 +149,14 @@ Direction Elephant::getHeading(const Turn turn) const
 		break;
 	}
 
-	const auto result{ GPS::cardinal(heading_ + theta) };
+	const auto result{ GPS::cardinal(theta) };
 
+	return result;
+}
+
+Direction Elephant::getHeading(const Turn turn) const
+{
+	const auto result{ GPS::cardinal(heading_ + getDirection(turn)) };
 	return result;
 }
 
@@ -169,13 +175,7 @@ Preserve::Feature Elephant::look(const Turn turn) const
 			break;
 
 		case Turn::kForward:
-			distance = 1;
-			break;
-
 		case Turn::kLeft:
-			distance = 1;
-			break;
-
 		case Turn::kRight:
 			distance = 1;
 			break;
@@ -186,7 +186,7 @@ Preserve::Feature Elephant::look(const Turn turn) const
 		}
 
 		auto gpsLocation = *gps_;
-		const auto delta{ getHeading(turn) };
+		const int delta{ getDirection(turn) };
 		gpsLocation.move(heading_ + delta, distance);
 		result = Preserve::getInstance().getFeature(gpsLocation);
 	}
@@ -253,4 +253,19 @@ void Elephant::move()
 	{
 		gps_->move(heading_, 1);
 	}
+}
+
+void Elephant::tag(GPS& gps)
+{
+	gps_ = &gps;
+}
+
+void Elephant::findHerd()
+{
+	Preserve::Feature feature;
+
+	feature = look(Turn::k0);
+	feature = look(Turn::kForward);
+	feature = look(Turn::kLeft);
+	feature = look(Turn::kRight);
 }
