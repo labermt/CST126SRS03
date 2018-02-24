@@ -153,3 +153,8 @@ void  Elephant::move()
 		gps_->move(heading_, 1);
 	}
 }
+
+void Elephant::findHerd()
+{
+
+}
