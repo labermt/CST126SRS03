@@ -43,6 +43,12 @@ public:
 	unsigned getElapsedTime() const;
 
 private: // Student available methods.
+	unsigned getAwake() const;
+	unsigned getWater() const;
+	unsigned getWeight() const;
+	unsigned getMinWeight() const;
+	unsigned getMaxWeight() const;
+
 	bool isSleepy() const;
 	bool isThirsty() const;
 	bool isHungry() const;

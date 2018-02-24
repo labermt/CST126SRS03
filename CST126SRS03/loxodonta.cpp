@@ -25,6 +25,36 @@ unsigned Elephant::getElapsedTime() const
 	return elapsedTime_;
 }
 
+unsigned Elephant::getAwake() const
+{
+	const unsigned result{ awake_ };
+	return result;
+}
+
+unsigned Elephant::getWater() const
+{
+	const unsigned result{ water_ };
+	return result;
+}
+
+unsigned Elephant::getWeight() const
+{
+	const unsigned result{ weight_ };
+	return result;
+}
+
+unsigned Elephant::getMinWeight() const
+{
+	const unsigned result{ minWeight_ };
+	return result;
+}
+
+unsigned Elephant::getMaxWeight() const
+{
+	const unsigned result{ maxWeight_ };
+	return result;
+}
+
 void Elephant::incrementTime(const unsigned minutes)
 {
 	auto min = minutes;
