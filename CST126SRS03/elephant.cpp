@@ -1,15 +1,79 @@
 #include "stdafx.h"
 #include "elephant.h"
+#include <cassert>
 
+// Qs for Mitch
+// Nested function? I want to add a function here to return true if I can pass through a space
+// Would there be a scenario where our elephant would be trapped and unable to reach the heard?
+// Can we set different thresholds for isThirsty / hungry?
 
 
 void Elephant::findHerd()
 {
 	auto found_heard = false;
+
+	if(look() == Preserve::Feature::kHerd)
+	{
+		found_heard = true;
+	}
+
 	while(!found_heard)
 	{
-		auto heading = getHeading(Turn::kForward);
-		auto heard_dir = listen();
+		auto heading = getHeading(Turn::k0);
+		const auto heard_dir = listen();
+		const auto look_f = look(Turn::kForward);
+		const auto look_l = look(Turn::kLeft);
+		const auto look_r = look(Turn::kRight);
+
+		switch (heard_dir)
+		{
+		case 0: //heard = forward placeholder
+			//look forward
+			//if clear move forward break;
+			
+			//look right
+			//if clear turn right, go forward break;
+
+			//look left
+			//if clear, turn right go forward break;
+
+			//last resort
+			//if front, right, left not clear
+			// turn left twice,
+			//break; (will be facing backwards and on the next iteration forward should be clear, else your trapped 
+			break;
+
+		case 1: //heard = left placeholder
+
+			//basically all these scenarios could be handled by a function
+			//if heard is left then turn left and follow case 0
+			//if heard is right, then turn right and follow case 0
+
+			//look left
+			//if clear turn left move forward break;
+
+			//look forward
+			//if clear move forward break;
+			turn(Turn::kLeft);
+			move();
+			break;
+
+		case 2: //heard = right placeholder
+			
+			turn(Turn::kRight);
+			move();
+			break;
+
+		default: //placeholder might not want this to be the default case but 
+			if (look() == Preserve::Feature::kHerd)
+			{
+				found_heard = true;
+				break;
+			}
+			assert(false);
+			break;
+		}
+
 		if(isThirsty() && look() == Preserve::Feature::kWater )
 		{
 			drink();
