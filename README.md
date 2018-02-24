@@ -8,7 +8,7 @@ SRS ID: CST126SRS03
 
 Unresolved Issues: 
 
-Notes: Can you read this
+Notes:
 
 ---
 
