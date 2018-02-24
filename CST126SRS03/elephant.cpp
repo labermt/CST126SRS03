@@ -11,7 +11,18 @@ void Elephant::tag(GPS& gps)
 }
 void Elephant::findHerd() 
 {
+	bool foundHerd{ false };
+
+	while (!foundHerd)
+	{
+		//search for herd
+
 		
-	//gps_->move(heading_, 1);
-	
+
+		//test if herd is found
+		if (look() == Preserve::Feature::kHerd) {
+			foundHerd = true;
+		}
+	}
+	//use look() function to determine what is under your feet
 }
