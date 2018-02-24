@@ -20,6 +20,75 @@ GPS* Elephant::getGps_() const
 	return gps_;
 }
 
+unsigned Elephant::getElapsedTime() const
+{
+	return elapsedTime_;
+}
+
+void Elephant::incrementTime(const unsigned minutes)
+{
+	auto min = minutes;
+
+	if (isSleepy())
+	{
+		min *= 2;
+	}
+
+	if (isThirsty())
+	{
+		min *= 2;
+	}
+
+	if (isHungry())
+	{
+		min *= 2;
+	}
+
+	elapsedTime_ += minutes;
+	awake_ += minutes;
+}
+
+void Elephant::decrementWater(const unsigned liters)
+{
+	int water = water_ - liters;
+	if (water < 0)
+	{
+		water = 0;
+	}
+	water_ -= water;
+}
+
+void Elephant::decrementWeight(const unsigned kg)
+{
+	if (weight_ >= minWeight_)
+	{
+		int weight = weight_ - kg;
+		if (weight < 0)
+		{
+			weight = 0;
+		}
+		weight_ = weight;
+	}
+}
+
+bool Elephant::isSleepy() const
+{
+	const auto result{ awake_ >= kMaxAwake };
+	return result;
+}
+
+bool Elephant::isThirsty() const
+{
+	const auto result{ water_ == 0 };
+	return result;
+}
+
+bool Elephant::isHungry() const
+{
+	const auto result{ weight_ < minWeight_ };
+	return result;
+}
+
 Preserve::Feature Elephant::look() const
 {
 	const auto result{ look(*this) };
@@ -103,6 +172,7 @@ int Elephant::listen() const
 
 void Elephant::sleep()
 {
+	incrementTime(120);
 	awake_ = 0;
 }
 
@@ -110,6 +180,7 @@ void Elephant::drink()
 {
 	const auto feature{ look() };
 
+	incrementTime(5);
 	if (feature == Preserve::Feature::kWater)
 	{
 		water_ = kMaxWater;
@@ -118,6 +189,7 @@ void Elephant::drink()
 
 void Elephant::eat()
 {
+	incrementTime(15);
 	if (gps_ != nullptr)
 	{
 		const auto feature{ look() };
@@ -136,20 +208,19 @@ void Elephant::eat()
 	}
 }
 
-void  Elephant::turn(const Turn turn)
+void Elephant::turn(const Turn turn)
 {
+	incrementTime(1);
 	heading_ = getHeading(turn);
 }
 
-void  Elephant::move()
+void Elephant::move()
 {
+	incrementTime(60);
+	decrementWater(20);
+	decrementWeight(20);
 	if (gps_ != nullptr)
 	{
-		// TODO: Add awake time, lose water and weight. 
-		// TODO: If awake too long, slow down.
-		// TODO: If dehydrated, slow down.
-		// TODO: If below weight, slow down.
-		// TODO: Move to the next GPS.
 		gps_->move(heading_, 1);
 	}
 }
