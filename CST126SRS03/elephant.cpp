@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "elephant.h"
 
 #include "direction.h"
 #include "gps.h"
