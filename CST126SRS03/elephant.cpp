@@ -4,6 +4,8 @@
 #include "direction.h"
 #include "gps.h"
 
+void dodgeObstacle();
+
 void Elephant::tag(GPS& gps)
 {
 <<<<<<< HEAD
@@ -13,51 +15,55 @@ void Elephant::tag(GPS& gps)
 >>>>>>> 4087efdf83d5cb2836685e045600cfcb20c2f274
 }
 
-
 void Elephant::findHerd()
 {
-	while (GPS* != herd)
+	while (GPS* != Preserve::Feature::kHerd) //this doesn't make sense yet, working on that.
 	{
 		auto destination = Elephant::listen();
-		auto lookingAt = look(Turn::kForward);
 
-		if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
+		if (destination == 0)
 		{
-			auto lookLeft = look(Turn::kLeft);
-			if (lookLeft == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
-			{
-				Bool ImightBeStuck;
-				turn(Turn::kRight);
-			}
+			auto lookingAt = look(Turn::kForward);
+			if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
+				dodgeObstacle();
 			else
-			{
-				turn(Turn::kLeft);
 				Elephant::move();
-			}
+		}
+		else if (destination == 90)
+		{
+			auto lookingAt = look(Turn::kRight);
+			if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
+				dodgeObstacle();
+			else
+				turn(Turn::kRight);
+		}
+		else if (destination == 270)
+		{
+			auto lookingAt = look(Turn::kLeft);
+			if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
+				dodgeObstacle();
+			else
+				turn(Turn::kLeft);
 		}
 		else
 		{
-			while (look != obstical)
-			{
-				if (destination == 0)
-				{
-					Elephant::move();
-				}
-				else if (destination == 90)
-				{
-					turn(Turn::kRight);
-					Elephant::move();
-				}
-				else if (destination == 270)
-				{
-					turn(Turn::kLeft);
-					Elephant::move();
-				}
-				else
-				{
-					turn(Turn::kLeft);
-				}
-			}
+			turn(Turn::kLeft);
+		}
+	}
+}
+
+void dodgeObstacle() //My new working project
+{
+	if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
+	{
+		if (lookLeft == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
+		{
+			turn(Turn::kRight);
+			turn(Turn::kRight);
+			lookingAt = look(Turn::kForward);
+			if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
+				bool iMightBeStuck = true;
+			else
 		}
 	}
 }
