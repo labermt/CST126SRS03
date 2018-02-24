@@ -6,7 +6,16 @@
 // Nested function? I want to add a function here to return true if I can pass through a space
 // Would there be a scenario where our elephant would be trapped and unable to reach the heard?
 // Can we set different thresholds for isThirsty / hungry?
+void movement(const int heard_dir)
+{
+	
+}
 
+bool movable(Elephant::Turn direction)
+{
+	auto result = false;
+
+}
 
 void Elephant::findHerd()
 {
@@ -86,6 +95,10 @@ void Elephant::findHerd()
 	}
 }
 
+void Elephant::tag(class GPS& gps)
+{
+	gps_ = &gps;
+}
 
 
 //while elephant hasnt found heard repeat these following steps
