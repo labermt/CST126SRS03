@@ -21,6 +21,8 @@ public:
 
 private:
 	Feature feature_[10][10];
+
+public:
 	static constexpr auto latExtent{ std::extent<decltype(Preserve::feature_), GPS::Coordinate::kLat>::value };
 	static constexpr auto lngExtent{ std::extent<decltype(Preserve::feature_), GPS::Coordinate::kLng>::value };
 
