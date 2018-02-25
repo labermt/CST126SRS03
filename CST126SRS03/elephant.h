@@ -38,27 +38,27 @@ private:
 	void decrementWater(const unsigned liters);
 	void decrementWeight(const unsigned kg);
 
-public:
-	GPS* getGps_() const;
-	unsigned getElapsedTime() const;
-
-private: // Student available methods.
+private:
 	bool isSleepy() const;
 	bool isThirsty() const;
 	bool isHungry() const;
 
+public:
+	GPS * getGps_() const;
+	unsigned getElapsedTime() const;
+
+private: // Available methods.
 	Direction getHeading(const Turn turn) const;
 	Preserve::Feature look() const;
 	Preserve::Feature look(const Turn turn) const;
 	int listen() const; // Elephants can feel vibrations with their feet. 
-
 	void sleep();
 	void drink();
 	void eat();
 	void turn(const Turn turn);
 	void move();
 
-public: // Student to implement methods: 
+public: // To be implemented methods. 
 	void tag(GPS& gps);
 	void findHerd();
 };

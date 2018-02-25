@@ -1,10 +1,7 @@
 #include "stdafx.h"
-<<<<<<< HEAD
 #include <iostream>
 #include "gps.h"
 #include "preserve.h"
-=======
->>>>>>> pr/4
 #include "elephant.h"
 
 void Elephant::tag( GPS& gps)
@@ -15,16 +12,17 @@ void Elephant::tag( GPS& gps)
 void Elephant::findHerd()
 {
 	// I don't know if this is necesary but it limits the typing below I think.
-	auto kUnknown_ = Preserve::Feature::kUnknown;
-	auto kHerd_ = Preserve::Feature::kHerd;
-	auto kDirt_ = Preserve::Feature::kDirt;
-	auto kRock_ = Preserve::Feature::kRock;
-	auto kBrush_ = Preserve::Feature::kBrush; 
-	auto kGrass_ = Preserve::Feature::kGrass;
-	auto kWater_ = Preserve::Feature::kWater;
+	auto const kUnknown_ = Preserve::Feature::kUnknown;
+	auto const kHerd_ = Preserve::Feature::kHerd;
+	auto const kDirt_ = Preserve::Feature::kDirt;
+	auto const kRock_ = Preserve::Feature::kRock;
+	auto const kBrush_ = Preserve::Feature::kBrush; 
+	auto const kGrass_ = Preserve::Feature::kGrass;
+	auto const kWater_ = Preserve::Feature::kWater;
 
 	auto feature = look();
 	auto foundHerd{ feature == kHerd_ };
+
 	while (!foundHerd)
 	{
 		const auto direction = listen();
@@ -33,7 +31,6 @@ void Elephant::findHerd()
 
 		if (isHungry())	 // no case for no grass or brush bordering.
 		{
-			eat();
 			while (look() != kGrass_)
 			{
 				if (look(Turn::kForward) == kBrush_)
