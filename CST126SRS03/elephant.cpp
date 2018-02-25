@@ -4,8 +4,6 @@
 
 using namespace std;
 
-// Radical new comment!
-
 void Elephant::tag(GPS& gps)
 {
 	gps_ = &gps;
