@@ -17,7 +17,12 @@ void Elephant::findHerd()
 	{
 		//search for herd
 
+		Preserve::Feature feature;
 		
+		feature = look(Turn::k0);
+		feature = look(Turn::kForward);
+		feature = look(Turn::kLeft);
+		feature = look(Turn::kRight);
 
 		//test if herd is found
 		if (look() == Preserve::Feature::kHerd) {
