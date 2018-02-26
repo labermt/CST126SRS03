@@ -3,10 +3,11 @@
 #include "gps.h"
 #include "preserve.h"
 #include "elephant.h"
+#include "loxodonta.h"
 
 void Elephant::tag( GPS& gps)
 {
-	gps_ = &gps;
+	//gps_ = &gps;
 }
 
 void Elephant::findHerd()
@@ -24,9 +25,55 @@ void Elephant::findHerd()
 	auto foundHerd{ feature == kHerd_ };
 	while (!foundHerd)
 	{
-		auto direction = listen();
-		turn(direction);
-		move();  // want this to be last statement
+		if (look() == kHerd_)
+		{
+			foundHerd = true;
+		}
+
+		//Listen and turn towrard the herd
+		while (GPS::cardinal(listen()) != getHeading(Turn::kForward))
+		{
+			turn(Turn::kRight);
+		}
+
+		//Check for brush in front of elephant
+		look(Turn::kForward);
+		if (look(Turn::kForward) == kBrush_)
+		{
+			eat();
+		}
+	
+		//Look at what elephant is standing on
+		if (look() == kGrass_)
+		{
+			eat();
+		}
+		else if (look() == kWater_)
+		{
+			drink();
+		}
+
+		//Maneuver around obstacles
+		while (look(Turn::kForward) == kRock_ || look(Turn::kForward) == kBrush_) // While there's an obstacle
+		{
+			if (look(Turn::kRight) != kRock_ || look(Turn::kRight) != kBrush_)	
+			{
+				turn(Turn::kRight);												
+				move();															
+				turn(Turn::kLeft);												
+			}
+			//If there is obstacle to Right
+			else if (look(Turn::kLeft) != kRock_ || look(Turn::kLeft) != kBrush_)	
+			{
+				turn(Turn::kLeft);
+				move();
+				turn(Turn::kRight);							
+			}
+		}
+
+
+
+		move(); 
 
 
 		if (isSleepy() && look() != kWater_)  
