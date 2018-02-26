@@ -10,6 +10,33 @@ Unresolved Issues:
 
 Notes: 
 
+# Pseudocode
+
+while (not at herd)
+{
+listen
+turn towards herd
+
+check for obsticle
+if brush -> eat it
+
+look at ground
+if grass -> eat it
+if water -> drink it
+if herd -> exit while loop
+
+if obsticle
+	turn 90 degrees
+	check for obsticle
+		if obsticle -> recurse
+	move forward
+	turn -90 degrees
+	check for obsticle
+		if obsticle -> recurse
+
+move forward
+}
+
 ---
 
 Purpose: 

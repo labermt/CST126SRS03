@@ -6,7 +6,8 @@
 
 void Elephant::tag( GPS& gps)
 {
-	gps_ = &gps;
+	//getGps_() = gps;
+	//gps_ = &gps;
 }
 
 void Elephant::findHerd()
