@@ -254,3 +254,4 @@ void Loxodonta::move()
 		gps_->move(heading_, 1);
 	}
 }
+
