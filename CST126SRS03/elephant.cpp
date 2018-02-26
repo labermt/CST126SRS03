@@ -30,26 +30,33 @@ void Elephant::findHerd()
 		auto rightClear = lookRight == Preserve::Feature::kGrass || lookRight == Preserve::Feature::kDirt || lookRight == Preserve::Feature::kWater || lookRight == Preserve::Feature::kHerd;
 		auto leftClear = lookLeft == Preserve::Feature::kGrass || lookLeft == Preserve::Feature::kDirt || lookLeft == Preserve::Feature::kWater || lookLeft == Preserve::Feature::kHerd;
 
-		/*if (weight_ - minWeight_ < 80)
+		if (getWeight() - getMinWeight() < 80)
 		{
-		if (feature == Preserve::Feature::kGrass)
-		{
-		eat();
+			if (feature == Preserve::Feature::kGrass)
+			{
+				eat();
+			}
+			else
+			{
+				auto possibleDirections = { Turn::kLeft, Turn::kForward, Turn::kRight };
+				for (auto direction : possibleDirections)
+				{
+					if (look(direction) == Preserve::Feature::kBrush)
+					{
+						turn(direction);
+						eat();
+						eat();
+						eat();
+						
+					}
+				}
+			}
 		}
-		else
+		if (feature == Preserve::Feature::kWater)
 		{
-		auto possibleDirections = { Turn::kLeft, Turn::kForward, Turn::kRight };
-		for (auto direction : possibleDirections)
-		{
-		if (look(direction) == Preserve::Feature::kBrush)
-		{
-		turn(direction);
-
+			drink();
 		}
-		}
-		}
-		}*/
-		if (getWater() < 60)
+		/*if (getWater() <= 20)
 		{
 			if (lookLeft == Preserve::Feature::kWater)
 			{
@@ -69,7 +76,7 @@ void Elephant::findHerd()
 				move();
 				drink();
 			}
-		}
+		}*/
 		if (getAwake() > 15 * 60)
 		{
 			sleep();

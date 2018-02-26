@@ -255,17 +255,17 @@ void Elephant::move()
 	}
 }
 
-void Elephant::tag(GPS& gps)
-{
-	gps_ = &gps;
-}
-
-void Elephant::findHerd()
-{
-	Preserve::Feature feature;
-
-	feature = look(Turn::k0);
-	feature = look(Turn::kForward);
-	feature = look(Turn::kLeft);
-	feature = look(Turn::kRight);
-}
+//void Elephant::tag(GPS& gps)
+//{
+//	gps_ = &gps;
+//}
+//
+//void Elephant::findHerd()
+//{
+//	Preserve::Feature feature;
+//
+//	feature = look(Turn::k0);
+//	feature = look(Turn::kForward);
+//	feature = look(Turn::kLeft);
+//	feature = look(Turn::kRight);
+//}
