@@ -34,6 +34,8 @@ public:
 
 private:
 	static Preserve::Feature look(const Elephant& elephant);
+	static Direction getDirection(const Turn turn);
+
 	void incrementTime(const unsigned minutes);
 	void decrementWater(const unsigned liters);
 	void decrementWeight(const unsigned kg);
