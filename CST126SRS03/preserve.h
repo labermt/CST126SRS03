@@ -3,7 +3,7 @@
 #include <type_traits>
 #include "gps.h"
 
-class Elephant;
+class Loxodonta;
 
 class Preserve
 {
@@ -47,6 +47,6 @@ private:
 public:
 	void killGrass(const GPS gps);
 	Feature getFeature(const GPS gps) const;
-	Feature getFeature(const Elephant& elephant) const;
-	int getHerdDirection(const Elephant& elephant) const;
+	Feature getFeature(const Loxodonta& loxodonta) const;
+	int getHerdDirection(const Loxodonta& loxodonta) const;
 };

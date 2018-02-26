@@ -2,71 +2,71 @@
 #include <cassert>
 #include "gps.h"
 #include "preserve.h"
-#include "elephant.h"
+#include "loxodonta.h"
 
-Elephant::Elephant(const unsigned weight, const Direction heading):
+Loxodonta::Loxodonta(const unsigned weight, const Direction heading):
 	weight_{ weight }, heading_{ heading }, minWeight_{ weight - 200 }, maxWeight_{ weight + 100 }
 {
 }
 
-Preserve::Feature Elephant::look(const Elephant& elephant)
+Preserve::Feature Loxodonta::look(const Loxodonta& loxodonta)
 {
-	const auto result{ Preserve::getInstance().getFeature(elephant) };
+	const auto result{ Preserve::getInstance().getFeature(loxodonta) };
 	return result;
 }
 
-GPS* Elephant::getGps_() const
+GPS* Loxodonta::getGps_() const
 {
 	return gps_;
 }
 
-unsigned Elephant::getElapsedTime() const
+unsigned Loxodonta::getElapsedTime() const
 {
 	return elapsedTime_;
 }
 
-unsigned Elephant::getAwake() const
+unsigned Loxodonta::getAwake() const
 {
 	const unsigned result{ awake_ };
 	return result;
 }
 
-unsigned Elephant::getWater() const
+unsigned Loxodonta::getWater() const
 {
 	const unsigned result{ water_ };
 	return result;
 }
 
-unsigned Elephant::getWeight() const
+unsigned Loxodonta::getWeight() const
 {
 	const unsigned result{ weight_ };
 	return result;
 }
 
-unsigned Elephant::getMinWeight() const
+unsigned Loxodonta::getMinWeight() const
 {
 	const unsigned result{ minWeight_ };
 	return result;
 }
 
-unsigned Elephant::getMaxWeight() const
+unsigned Loxodonta::getMaxWeight() const
 {
 	const unsigned result{ maxWeight_ };
 	return result;
 }
 
-void Elephant::incrementTime(const unsigned minutes)
+void Loxodonta::incrementTime(const unsigned minutes)
 {
 	auto min = minutes;
 
 	if (isSleepy())
 	{
-		min *= 2;
+		min *= 3;
 	}
 
 	if (isThirsty())
 	{
-		min *= 2;
+		min *= 4;
 	}
 
 	if (isHungry())
@@ -74,11 +74,11 @@ void Elephant::incrementTime(const unsigned minutes)
 		min *= 2;
 	}
 
-	elapsedTime_ += minutes;
-	awake_ += minutes;
+	elapsedTime_ += min;
+	awake_ += min;
 }
 
-void Elephant::decrementWater(const unsigned liters)
+void Loxodonta::decrementWater(const unsigned liters)
 {
 	int water = water_ - liters;
 	if (water < 0)
@@ -88,7 +88,7 @@ void Elephant::decrementWater(const unsigned liters)
 	water_ -= water;
 }
 
-void Elephant::decrementWeight(const unsigned kg)
+void Loxodonta::decrementWeight(const unsigned kg)
 {
 	if (weight_ >= minWeight_)
 	{
@@ -101,31 +101,31 @@ void Elephant::decrementWeight(const unsigned kg)
 	}
 }
 
-bool Elephant::isSleepy() const
+bool Loxodonta::isSleepy() const
 {
 	const auto result{ awake_ >= kMaxAwake };
 	return result;
 }
 
-bool Elephant::isThirsty() const
+bool Loxodonta::isThirsty() const
 {
 	const auto result{ water_ == 0 };
 	return result;
 }
 
-bool Elephant::isHungry() const
+bool Loxodonta::isHungry() const
 {
 	const auto result{ weight_ < minWeight_ };
 	return result;
 }
 
-Preserve::Feature Elephant::look() const
+Preserve::Feature Loxodonta::look() const
 {
 	const auto result{ look(*this) };
 	return result;
 }
 
-Direction Elephant::getDirection(const Turn turn)
+Direction Loxodonta::getDirection(const Turn turn)
 {
 	auto theta{ 0 };
 
@@ -154,13 +154,13 @@ Direction Elephant::getDirection(const Turn turn)
 	return result;
 }
 
-Direction Elephant::getHeading(const Turn turn) const
+Direction Loxodonta::getHeading(const Turn turn) const
 {
 	const auto result{ GPS::cardinal(heading_ + getDirection(turn)) };
 	return result;
 }
 
-Preserve::Feature Elephant::look(const Turn turn) const
+Preserve::Feature Loxodonta::look(const Turn turn) const
 {
 	auto result{ Preserve::Feature::kUnknown };
 
@@ -194,19 +194,19 @@ Preserve::Feature Elephant::look(const Turn turn) const
 	return result;
 }
 
-int Elephant::listen() const
+int Loxodonta::listen() const
 {
 	const auto result{ Preserve::getInstance().getHerdDirection(*this) };
 	return result;
 }
 
-void Elephant::sleep()
+void Loxodonta::sleep()
 {
 	incrementTime(120);
 	awake_ = 0;
 }
 
-void Elephant::drink()
+void Loxodonta::drink()
 {
 	const auto feature{ look() };
 
@@ -217,7 +217,7 @@ void Elephant::drink()
 	}
 }
 
-void Elephant::eat()
+void Loxodonta::eat()
 {
 	incrementTime(15);
 	if (gps_ != nullptr)
@@ -238,13 +238,13 @@ void Elephant::eat()
 	}
 }
 
-void Elephant::turn(const Turn turn)
+void Loxodonta::turn(const Turn turn)
 {
 	incrementTime(1);
 	heading_ = getHeading(turn);
 }
 
-void Elephant::move()
+void Loxodonta::move()
 {
 	incrementTime(60);
 	decrementWater(20);
@@ -254,18 +254,3 @@ void Elephant::move()
 		gps_->move(heading_, 1);
 	}
 }
-
-//void Elephant::tag(GPS& gps)
-//{
-//	gps_ = &gps;
-//}
-//
-//void Elephant::findHerd()
-//{
-//	Preserve::Feature feature;
-//
-//	feature = look(Turn::k0);
-//	feature = look(Turn::kForward);
-//	feature = look(Turn::kLeft);
-//	feature = look(Turn::kRight);
-//}
