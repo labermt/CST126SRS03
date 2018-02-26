@@ -17,7 +17,7 @@ while (not at herd)
 listen
 turn towards herd
 
-check for obsticle
+check for obstacle
 if brush -> eat it
 
 look at ground
@@ -25,14 +25,14 @@ if grass -> eat it
 if water -> drink it
 if herd -> exit while loop
 
-if obsticle
+if obstacle
 	turn 90 degrees
-	check for obsticle
-		if obsticle -> recurse
+	check for obstacle
+		if obstacle -> recurse
 	move forward
 	turn -90 degrees
-	check for obsticle
-		if obsticle -> recurse
+	check for obstacle
+		if obstacle -> recurse
 
 move forward
 }

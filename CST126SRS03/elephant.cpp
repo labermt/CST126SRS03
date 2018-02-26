@@ -30,61 +30,10 @@ void Elephant::findHerd()
 		auto turn(direction);
 		move();
 
-		if (isHungry())	 // no case for no grass or brush bordering.
-		{
-			while (look() != kGrass_)
-			{
-				if (look(Turn::kForward) == kBrush_)
-				{
-					eat();
-				}
-				else if (look(Turn::kForward) == kGrass_)
-				{
-					move();
-					eat();
-				}
-				else if (look(Turn::kRight) == kBrush_)
-				{
-					auto turn(Turn::kRight);
-					eat();
-			
-				}
-				else if (look(Turn::kRight) == kGrass_)
-				{
-					auto turn(Turn::kRight);
-					move();
-					eat();
-				}
-				else if (look(Turn::kLeft) == kBrush_)
-				{
-					auto turn(Turn::kLeft);
-					eat();
-				}
-				else if (look(Turn::kLeft) == kGrass_)
-				{
-					auto turn(Turn::kLeft);
-					move();
-					eat();
-				}
-			}
-		}
-
-
-		if (isThirsty())
-		{
-			while (look() != kWater_)
-			{
-				//turn until elephant is facing water. 
-				//case for no water bordering
-			}
-		}
-
-
 		if (isSleepy() || look() != kWater_)  // so the elephant doesn't sleep in water
 		{
 			sleep();
 		}
 		
 	}
-	
 }
