@@ -7,10 +7,7 @@
 
 void Elephant::tag( GPS& gps)
 {
-<<<<<<< HEAD
 	//getGps_() = gps;
-=======
->>>>>>> pr/7
 	//gps_ = &gps;
 }
 
@@ -35,9 +32,6 @@ void Elephant::findHerd()
 			foundHerd = true;
 		}
 
-<<<<<<< HEAD
-		if (isSleepy() || look() != kWater_)  // so the elephant doesn't sleep in water
-=======
 		//Listen and turn towrard the herd
 		while (GPS::cardinal(listen()) != getHeading(Turn::kForward))
 		{
@@ -66,26 +60,22 @@ void Elephant::findHerd()
 		{
 			if (look(Turn::kRight) != kRock_ || look(Turn::kRight) != kBrush_)	
 			{
-				turn(Turn::kRight);												
-				move();															
-				turn(Turn::kLeft);												
+				turn(Turn::kRight);
+				move();
+				turn(Turn::kLeft);
 			}
 			//If there is obstacle to Right
 			else if (look(Turn::kLeft) != kRock_ || look(Turn::kLeft) != kBrush_)	
 			{
 				turn(Turn::kLeft);
 				move();
-				turn(Turn::kRight);							
+				turn(Turn::kRight);
 			}
 		}
 
-
-
 		move(); 
 
-
 		if (isSleepy() && look() != kWater_)  
->>>>>>> pr/7
 		{
 			sleep();
 		}
