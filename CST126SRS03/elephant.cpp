@@ -8,7 +8,7 @@ void dodgeObstacle();
 
 void Elephant::tag(GPS& gps)
 {
-	gps_ = &gps;
+	//The GPS tagging method was changed recently. We can work on that problem later.
 }
 
 void Elephant::findHerd()
