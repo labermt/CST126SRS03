@@ -39,7 +39,6 @@ void Elephant::findHerd()
 		}
 
 		//Check for brush in front of elephant
-		look(Turn::kForward);
 		if (look(Turn::kForward) == kBrush_)
 		{
 			eat();
@@ -55,17 +54,23 @@ void Elephant::findHerd()
 			drink();
 		}
 
+		//Sleep if tired, and not in water (no killing elephant)
+		if (isSleepy() && look() != kWater_)  
+		{
+			sleep();
+		}
+
 		//Maneuver around obstacles
 		while (look(Turn::kForward) == kRock_ || look(Turn::kForward) == kBrush_) // While there's an obstacle
 		{
-			if (look(Turn::kRight) != kRock_ || look(Turn::kRight) != kBrush_)	
+			if (look(Turn::kRight) != kRock_ && look(Turn::kRight) != kBrush_)	
 			{
 				turn(Turn::kRight);
 				move();
 				turn(Turn::kLeft);
 			}
 			//If there is obstacle to Right
-			else if (look(Turn::kLeft) != kRock_ || look(Turn::kLeft) != kBrush_)	
+			else if (look(Turn::kLeft) != kRock_ && look(Turn::kLeft) != kBrush_)	
 			{
 				turn(Turn::kLeft);
 				move();
@@ -73,12 +78,7 @@ void Elephant::findHerd()
 			}
 		}
 
-		move(); 
 
-		if (isSleepy() && look() != kWater_)  
-		{
-			sleep();
-		}
-		
+		move(); 
 	}
 }
