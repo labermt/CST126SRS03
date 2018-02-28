@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include <iostream>
 #include "gps.h"
 #include "preserve.h"
 #include "elephant.h"
@@ -7,8 +6,7 @@
 
 void Elephant::tag( GPS& gps)
 {
-	//getGps_() = gps;
-	//gps_ = &gps;
+	setGps(gps);
 }
 
 void Elephant::findHerd()
@@ -27,6 +25,7 @@ void Elephant::findHerd()
 
 	while (!foundHerd)
 	{
+		// TODO: Not stopping here, will fix tomorrow
 		if (look() == kHerd_)
 		{
 			foundHerd = true;
