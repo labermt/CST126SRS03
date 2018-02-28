@@ -38,6 +38,7 @@ private:
 	void decrementWeight(const unsigned kg);
 
 public:
+	void setGps(GPS& gps);
 	GPS * getGps_() const;
 	unsigned getElapsedTime() const;
 

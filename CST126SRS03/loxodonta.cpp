@@ -15,6 +15,11 @@ Preserve::Feature Loxodonta::look(const Loxodonta& loxodonta)
 	return result;
 }
 
+void Loxodonta::setGps(GPS & gps)
+{
+	gps_ = &gps;
+}
+
 GPS* Loxodonta::getGps_() const
 {
 	return gps_;
