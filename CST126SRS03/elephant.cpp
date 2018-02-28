@@ -103,7 +103,7 @@ void Elephant::findHerd()
 
 void Elephant::tag(class GPS& gps)
 {
-	gps_ = &gps;
+	setGps(gps);
 }
 
 
