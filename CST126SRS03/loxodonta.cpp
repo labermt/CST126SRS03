@@ -108,7 +108,7 @@ void Loxodonta::decrementWeight(const unsigned kg)
 
 bool Loxodonta::isSleepy() const
 {
-	const auto result{ awake_ >= kMaxAwake };
+	const auto result{ awake_ >= 60*kMaxAwake };
 	return result;
 }
 
