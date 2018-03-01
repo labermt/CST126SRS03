@@ -50,51 +50,74 @@ void Elephant::findHerd()
 		//SECOND, LISTEN FOR HERD
 		herdDirection = listen();
 
-		//detect if obstacles are in front of elephant
+		if (herdDirection == 0) {
+			turn(Turn::kForward);
+		}
+		else if (herdDirection == 90) {
+			turn(Turn::kRight);
+		}
+		else if (herdDirection == 180) {
+			turn(Turn::kRight);
+			turn(Turn::kRight);
+		}
+		else if (herdDirection == 270) {
+			turn(Turn::kLeft);
+		}
+
+
+		//THIRD, detect if obstacles are in front of elephant
 		if (look(Turn::kForward) == Preserve::Feature::kRock ||
 			look(Turn::kForward) == Preserve::Feature::kBrush)
 		{
 			
-			
-			//TODO: FIGURE OUT HOW TO GO AROUND OBSTACLES
-			
-			
-			//move around obstacle
-			if (herdDirection == 0) {
-				turn(Turn::kRight);
-				turn(Turn::kRight);
+
+			//Check obstacle left
+			if (look(Turn::kLeft) == Preserve::Feature::kRock ||
+				look(Turn::kLeft) == Preserve::Feature::kBrush) 
+			{
+				//check obstacle right
+				if (look(Turn::kRight) == Preserve::Feature::kRock ||
+					look(Turn::kRight) == Preserve::Feature::kBrush)
+				{
+					turn(Turn::kRight);
+					turn(Turn::kRight);
+					move();
+
+					//elephant is lost at this point
+					throw;
+
+					/* 
+					//This code may be implemented once I can figure out a reliable solution
+					if (look(Turn::kRight) == Preserve::Feature::kRock ||
+						look(Turn::kRight) == Preserve::Feature::kBrush) {
+
+						
+					}
+					else {
+						turn(Turn::kRight);
+						move();
+						turn(Turn::kRight);
+					}
+					*/
+
+				}
+				else {
+					turn(Turn::kRight);
+					move();
+					turn(Turn::kLeft);
+				}
 			}
-			else if (herdDirection == 90) {
-				turn(Turn::kRight);
-			}
-			else if (herdDirection == 180) {
-				turn(Turn::kRight);
-				turn(Turn::kRight);
-			}
-			else if (herdDirection == 270) {
+			else {
 				turn(Turn::kLeft);
+				move();
+				turn(Turn::kRight);
 			}
+
 		}
 		else {
-			//normal move
-			if (herdDirection == 0) {
-				turn(Turn::kForward);
-			}
-			else if (herdDirection == 90) {
-				turn(Turn::kRight);
-			}
-			else if (herdDirection == 180) {
-				turn(Turn::kRight);
-				turn(Turn::kRight);
-			}
-			else if (herdDirection == 270) {
-				turn(Turn::kLeft);
-			}
+			move();
 		}
-
-		//std::cout << direction << std::endl;
-
-		//LASTLY, MOVE TOWARDS HERD
-		move();
+		
+			
 	}
 }
