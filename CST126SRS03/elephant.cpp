@@ -8,14 +8,14 @@ void dodgeObstacle(Loxodonta::Turn heading);
 
 void Elephant::tag(GPS& gps)
 {
-	//The GPS tagging method was changed recently. We can work on that problem later.
+	Loxodonta::setGps(gps); 
 }
 
 void Elephant::findHerd()
 {
 	while (look() != Preserve::Feature::kHerd)
 	{
-		auto destination = Elephant::listen();
+		auto destination = Loxodonta::listen();
 
 		if (destination == 0)
 		{
@@ -23,7 +23,7 @@ void Elephant::findHerd()
 			if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
 				dodgeObstacle(Loxodonta::Turn::kForward);
 			else
-				Elephant::move();
+				Loxodonta::move();
 		}
 		else if (destination == 90)
 		{
@@ -45,16 +45,17 @@ void Elephant::findHerd()
 		{
 			turn(Turn::kLeft);
 		}
+		Loxodonta::move();
 	}
 }
 
-void dodgeObstacle(Loxodonta::Turn heading) //My new working project
+void dodgeObstacle(Loxodonta::Turn heading) //I've got it set up, but it doesn't like it for some reasons, going to check on that later.
 {
 	switch (heading) {
-	case Loxodonta::Turn::kForward : Loxodonta::Preserve::Feature::turn(Turn::kLeft);
+	case Loxodonta::Turn::kForward : Loxodonta::turn(Loxodonta::Turn::kLeft);
 	case Loxodonta::Turn::kRight : Loxodonta::move();
-		turn(Loxodonta::Turn::kRight);
-		while (Loxodonta:: Preserve::Feature:: look(Loxodonta::Turn::kRight) != Preserve::Feature::kRock || look(Loxodonta::Turn::kRight) != Preserve::Feature::kBrush)
+		Loxodonta::turn(Loxodonta::Turn::kRight);
+		while (Loxodonta::look(Loxodonta::Turn::kRight) != Preserve::Feature::kRock || Elephant::Loxodonta::look(Loxodonta::Turn::kRight) != Preserve::Feature::kBrush)
 			Elephant::move();
 		break;
 	case Loxodonta::Turn::kLeft : Elephant::move();
