@@ -149,9 +149,13 @@ void Elephant::findHerd()
 			drink();
 		}
 		
-		if(isHungry() && look() == Preserve::Feature::kGrass || look() == Preserve::Feature::kBrush )
+		if(getWeight() <= (getMaxWeight() / 2) && look() == Preserve::Feature::kGrass || look(Turn::kForward) == Preserve::Feature::kBrush )
 		{
 			eat();
+		}
+		if(look()== Preserve::Feature::kHerd)
+		{
+			found_heard = true;
 		}
 	}
 }
@@ -160,20 +164,3 @@ void Elephant::tag(class GPS& gps)
 {
 	setGps(gps);
 }
-
-
-//while elephant hasnt found heard repeat these following steps
-// attach and update gps position if needed
-//
-// setup following as case statements
-//
-// check for food / water
-// if food / water == true eat / drink
-// 
-// listen for heard
-// turn to closest direction of heard
-// 
-// look forward
-// if blocked && heard  < 90
-// turn right else turn left
-//
