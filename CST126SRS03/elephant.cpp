@@ -8,7 +8,7 @@
 
 void Elephant::tag(GPS& gps)
 {
-	gps_ = &gps; //THIS DOESN'T WORK NOW WITH MITCH"S NEW INHERITANCE COMMIT??
+	setGps(gps);
 }
 void Elephant::findHerd()
 {
@@ -21,6 +21,7 @@ void Elephant::findHerd()
 		//search for herd
 
 		Preserve::Feature feature;
+		int heading;
 
 		//FIRST, SURVIVE
 		//Look in all directions for herd
@@ -34,6 +35,7 @@ void Elephant::findHerd()
 				break;
 			}
 		}
+		if (foundHerd) break;
 		feature = look();
 
 		//Deal with hunger
@@ -101,7 +103,7 @@ void Elephant::findHerd()
 					*/
 
 				}
-				else {
+				else { //ERROR HERE FOR SOME REASON WHEN TESTING
 					turn(Turn::kRight);
 					move();
 					turn(Turn::kLeft);
@@ -117,7 +119,5 @@ void Elephant::findHerd()
 		else {
 			move();
 		}
-		
-			
 	}
 }
