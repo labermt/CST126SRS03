@@ -8,9 +8,7 @@
 bool movable(Elephant::Turn dir)
 {
 	auto result = false;
-	const auto look = Elephant::look(dir);
-	
-	switch (look)
+	/*switch (Elephant::look(dir))
 	{
 	case Preserve::Feature::kUnknown:
 	case Preserve::Feature::kRock:
@@ -27,14 +25,13 @@ bool movable(Elephant::Turn dir)
 	default:
 		assert(false);
 		break;
-	}
+	}*/
 	return result;
 }
 
 void Elephant::findHerd()
 {
 	auto found_heard = false;
-
 	if(look() == Preserve::Feature::kHerd)
 	{
 		found_heard = true;
@@ -42,106 +39,111 @@ void Elephant::findHerd()
 
 	while(!found_heard)
 	{
-		auto heading = getHeading(Turn::k0);
-		const auto heard_dir = listen();
-
-		switch (heard_dir)
+		int heading{};
+		switch (getHeading(Turn::kForward))
 		{
-		case 0: //heard = forward placeholder
-			if(movable(Turn::kForward))
-			{
-				move();
-				break;
-			}
-			if(movable(Turn::kRight))
-			{
-				turn(Turn::kRight);
-				move();
-				break;
-			}
-			if(movable(Turn::kLeft))
-			{
-				turn(Turn::kLeft);
-				move();
-				break;
-			}
-			else
-			{
-				turn(Turn::kLeft);
-				turn(Turn::kLeft);
-				// mark gps spot as immovable
-				move();
-				turn(Turn::kRight);
-				break;
-			}
+		case kNorth:
+			heading = 0;
+			break;
 
-		case 1: //heard = left placeholder
-			if(movable(Turn::kLeft))
-			{
-				turn(Turn::kLeft);
-				move();
-				break;
-			}
-			if(movable(Turn::kForward))
-			{
-				move();
-				break;
-			}
-			//not sure if I want this case to be turn right or turn back
-			if(movable(Turn::kRight))
-			{
-				turn(Turn::kRight);
-				move();
-				break;
-			}
-			else
-			{
-				turn(Turn::kRight);
-				turn(Turn::kRight);
-				// mark gps spot as immovable
-				move();
-				turn(Turn::kLeft);
-				break;
-			}
-
-		case 2: //heard = right placeholder
+		case kEast:
+			heading = 270;
+			break;
 			
-			if(movable(Turn::kRight))
-			{
-				turn(Turn::kRight);
-				move();
-				break;
-			}
-			if(movable(Turn::kForward))
-			{
-				move();
-				break;
-			}
-			//not sure if I want this case to be turn right or turn back
-			if(movable(Turn::kLeft))
-			{
-				turn(Turn::kLeft);
-				move();
-				break;
-			}
-			else
-			{
-				turn(Turn::kLeft);
-				turn(Turn::kLeft);
-				// mark gps spot as immovable
-				move();
-				turn(Turn::kRight);
-				break;
-			}
+		case kSouth:
+			heading = 180;
+			break;
+			
+		case kWest:
+			heading = 90;
+			break;
 
-		default: //placeholder might not want this to be the default case but 
-			if (look() == Preserve::Feature::kHerd)
-			{
-				found_heard = true;
-				break;
-			}
+		default:
 			assert(false);
 			break;
+		}
+	
+		auto const herd_dir = heading - listen();
+		if(herd_dir == 0)
+		{
+			if(movable(Turn::kForward))
+			{
+				move();
+			}
+			else if(movable(Turn::kRight))
+			{
+				turn(Turn::kRight);
+				move();
+			}
+			else if(movable(Turn::kLeft))
+			{
+				turn(Turn::kLeft);
+				move();
+			}
+			else
+			{
+				turn(Turn::kLeft);
+				turn(Turn::kLeft);
+				// mark gps spot as immovable
+				move();
+				turn(Turn::kRight);
+			}
+		}
+		else if(herd_dir < 0)
+		{
+			if(movable(Turn::kLeft))
+			{
+				turn(Turn::kLeft);
+				move();
+			}
+			else if(movable(Turn::kForward))
+			{
+				move();
+			}
+			//not sure if I want this case to be turn right or turn back
+			else if(movable(Turn::kRight))
+			{
+				turn(Turn::kRight);
+				move();
+			}
+			else
+			{
+				turn(Turn::kRight);
+				turn(Turn::kRight);
+				// mark gps spot as immovable
+				move();
+				turn(Turn::kLeft);
+			}
+		}
+		else if(herd_dir > 0)
+		{
+			if(movable(Turn::kRight))
+			{
+				turn(Turn::kRight);
+				move();
+			}
+			else if(movable(Turn::kForward))
+			{
+				move();
+			}
+			//not sure if I want this case to be turn right or turn back
+			else if(movable(Turn::kLeft))
+			{
+				turn(Turn::kLeft);
+				move();
+			}
+			else
+			{
+				turn(Turn::kLeft);
+				turn(Turn::kLeft);
+				// mark gps spot as immovable
+				move();
+				turn(Turn::kRight);
+			}
+		}
+		else
+		{
+			assert(false);
 		}
 
 		if(isThirsty() && look() == Preserve::Feature::kWater )
