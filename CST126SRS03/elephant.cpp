@@ -5,25 +5,35 @@
 // Qs for Mitch
 
 
-void movement(const int heard_dir)
-{
-	//const auto look_f = look(Elephant::Turn::kForward);
-	//const auto look_l = look(Turn::kLeft);
-	//const auto look_r = look(Turn::kRight);
-}
-
-bool movable(Elephant::Turn direction)
+bool movable(Elephant::Turn dir)
 {
 	auto result = false;
+	const auto look = Elephant::look(dir);
 	
+	switch (look)
+	{
+	case Preserve::Feature::kUnknown:
+	case Preserve::Feature::kRock:
+	case Preserve::Feature::kBrush:
+		break;
 
+	case Preserve::Feature::kDirt:
+	case Preserve::Feature::kGrass:
+	case Preserve::Feature::kWater:
+	case Preserve::Feature::kHerd:
+		result = true;
+		break;
+
+	default:
+		assert(false);
+		break;
+	}
 	return result;
 }
 
 void Elephant::findHerd()
 {
 	auto found_heard = false;
-	
 
 	if(look() == Preserve::Feature::kHerd)
 	{
@@ -38,46 +48,91 @@ void Elephant::findHerd()
 		switch (heard_dir)
 		{
 		case 0: //heard = forward placeholder
-			if (movable(Turn::kForward))
-				{
-					move();
-					break;
-				}
-			//look forward
-			//if clear move forward break;
-			
-			//look right
-			//if clear turn right, go forward break;
-
-			//look left
-			//if clear, turn right go forward break;
-
-			//last resort
-			//if front, right, left not clear
-			// turn left twice,
-			//break; (will be facing backwards and on the next iteration forward should be clear, else your trapped 
-			break;
+			if(movable(Turn::kForward))
+			{
+				move();
+				break;
+			}
+			if(movable(Turn::kRight))
+			{
+				turn(Turn::kRight);
+				move();
+				break;
+			}
+			if(movable(Turn::kLeft))
+			{
+				turn(Turn::kLeft);
+				move();
+				break;
+			}
+			else
+			{
+				turn(Turn::kLeft);
+				turn(Turn::kLeft);
+				// mark gps spot as immovable
+				move();
+				turn(Turn::kRight);
+				break;
+			}
 
 		case 1: //heard = left placeholder
-
-			//basically all these scenarios could be handled by a function
-			//if heard is left then turn left and follow case 0
-			//if heard is right, then turn right and follow case 0
-
-			//look left
-			//if clear turn left move forward break;
-
-			//look forward
-			//if clear move forward break;
-			turn(Turn::kLeft);
-			move();
-			break;
+			if(movable(Turn::kLeft))
+			{
+				turn(Turn::kLeft);
+				move();
+				break;
+			}
+			if(movable(Turn::kForward))
+			{
+				move();
+				break;
+			}
+			//not sure if I want this case to be turn right or turn back
+			if(movable(Turn::kRight))
+			{
+				turn(Turn::kRight);
+				move();
+				break;
+			}
+			else
+			{
+				turn(Turn::kRight);
+				turn(Turn::kRight);
+				// mark gps spot as immovable
+				move();
+				turn(Turn::kLeft);
+				break;
+			}
 
 		case 2: //heard = right placeholder
 			
-			turn(Turn::kRight);
-			move();
-			break;
+			if(movable(Turn::kRight))
+			{
+				turn(Turn::kRight);
+				move();
+				break;
+			}
+			if(movable(Turn::kForward))
+			{
+				move();
+				break;
+			}
+			//not sure if I want this case to be turn right or turn back
+			if(movable(Turn::kLeft))
+			{
+				turn(Turn::kLeft);
+				move();
+				break;
+			}
+			else
+			{
+				turn(Turn::kLeft);
+				turn(Turn::kLeft);
+				// mark gps spot as immovable
+				move();
+				turn(Turn::kRight);
+				break;
+			}
 
 		default: //placeholder might not want this to be the default case but 
 			if (look() == Preserve::Feature::kHerd)
