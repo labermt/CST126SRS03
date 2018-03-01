@@ -15,6 +15,11 @@ Preserve::Feature Loxodonta::look(const Loxodonta& loxodonta)
 	return result;
 }
 
+void Loxodonta::setGps(GPS & gps)
+{
+	gps_ = &gps;
+}
+
 GPS* Loxodonta::getGps_() const
 {
 	return gps_;
@@ -103,7 +108,7 @@ void Loxodonta::decrementWeight(const unsigned kg)
 
 bool Loxodonta::isSleepy() const
 {
-	const auto result{ awake_ >= kMaxAwake };
+	const auto result{ awake_ >= 60*kMaxAwake };
 	return result;
 }
 
