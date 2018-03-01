@@ -5,10 +5,10 @@
 // Qs for Mitch
 
 
-bool movable(Elephant::Turn dir)
+bool movable(Preserve::Feature const terrain)
 {
 	auto result = false;
-	/*switch (Elephant::look(dir))
+	switch (terrain)
 	{
 	case Preserve::Feature::kUnknown:
 	case Preserve::Feature::kRock:
@@ -25,7 +25,7 @@ bool movable(Elephant::Turn dir)
 	default:
 		assert(false);
 		break;
-	}*/
+	}
 	return result;
 }
 
@@ -36,46 +36,23 @@ void Elephant::findHerd()
 	{
 		found_heard = true;
 	}
-
+	
 	while(!found_heard)
 	{
-		int heading{};
-		switch (getHeading(Turn::kForward))
+		auto const herd_dir = getHeading(Turn::kForward) - listen();
+		switch(herd_dir)
 		{
-		case kNorth:
-			heading = 0;
-			break;
-
-		case kEast:
-			heading = 270;
-			break;
-			
-		case kSouth:
-			heading = 180;
-			break;
-			
-		case kWest:
-			heading = 90;
-			break;
-
-		default:
-			assert(false);
-			break;
-		}
-	
-		auto const herd_dir = heading - listen();
-		if(herd_dir == 0)
-		{
-			if(movable(Turn::kForward))
+			case 0:
+			if(movable(look(Turn::kForward)))
 			{
 				move();
 			}
-			else if(movable(Turn::kRight))
+			else if(movable(look(Turn::kRight)))
 			{
 				turn(Turn::kRight);
 				move();
 			}
-			else if(movable(Turn::kLeft))
+			else if(movable(look(Turn::kLeft)))
 			{
 				turn(Turn::kLeft);
 				move();
@@ -88,62 +65,67 @@ void Elephant::findHerd()
 				move();
 				turn(Turn::kRight);
 			}
-		}
-		else if(herd_dir < 0)
-		{
-			if(movable(Turn::kLeft))
+			break;
+
+			case 90:
+			if(movable(look(Turn::kRight)))
 			{
-				turn(Turn::kLeft);
+				turn(Turn::kRight);
 				move();
 			}
-			else if(movable(Turn::kForward))
+			else if(movable(look(Turn::kForward)))
 			{
 				move();
 			}
 			//not sure if I want this case to be turn right or turn back
-			else if(movable(Turn::kRight))
+			else if(movable(look(Turn::kLeft)))
 			{
-				turn(Turn::kRight);
+				turn(Turn::kLeft);
 				move();
 			}
 			else
 			{
-				turn(Turn::kRight);
-				turn(Turn::kRight);
+				turn(Turn::kLeft);
+				turn(Turn::kLeft);
 				// mark gps spot as immovable
 				move();
-				turn(Turn::kLeft);
-			}
-		}
-		else if(herd_dir > 0)
-		{
-			if(movable(Turn::kRight))
-			{
 				turn(Turn::kRight);
+			}
+			break;
+
+			case 270:
+			if(movable(look(Turn::kLeft)))
+			{
+				turn(Turn::kLeft);
 				move();
 			}
-			else if(movable(Turn::kForward))
+			else if(movable(look(Turn::kForward)))
 			{
 				move();
 			}
 			//not sure if I want this case to be turn right or turn back
-			else if(movable(Turn::kLeft))
+			else if(movable(look(Turn::kRight)))
 			{
-				turn(Turn::kLeft);
+				turn(Turn::kRight);
 				move();
 			}
 			else
 			{
-				turn(Turn::kLeft);
-				turn(Turn::kLeft);
+				turn(Turn::kRight);
+				turn(Turn::kRight);
 				// mark gps spot as immovable
 				move();
-				turn(Turn::kRight);
+				turn(Turn::kLeft);
 			}
-		}
-		else
-		{
+			break;
+			
+			case 180:
+			//not sure what to do if 180
+			break;
+
+			default:
 			assert(false);
+			break;
 		}
 
 		if(isThirsty() && look() == Preserve::Feature::kWater )
