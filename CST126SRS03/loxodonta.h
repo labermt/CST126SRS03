@@ -37,8 +37,10 @@ private:
 	void decrementWater(const unsigned liters);
 	void decrementWeight(const unsigned kg);
 
-public:
+protected:
 	void setGps(GPS& gps);
+
+public:
 	GPS * getGps_() const;
 	unsigned getElapsedTime() const;
 
