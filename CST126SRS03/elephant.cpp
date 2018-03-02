@@ -2,8 +2,12 @@
 #include "elephant.h"
 #include <cassert>
 
-// Qs for Mitch
+// Methods to implement in heirarchal order: eleTrail, isStuck, isNecesity, retraceTrail
 
+/* void eleTrail()
+{
+	
+} */
 
 bool movable(Preserve::Feature const terrain)
 {
@@ -94,9 +98,14 @@ void Elephant::findHerd()
 				{
 					move();
 				}
-				else
+				else //Herd is behind Elephant 
 				{
-					assert(false);
+					//assert(false);
+
+					turn(Turn::kLeft);
+					turn(Turn::kLeft);
+
+					//Redetermine herds' location.
 				}
 			}
 		}

@@ -10,16 +10,16 @@ Preserve::Preserve():
 	{
 		{ Feature::kRock, Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock, Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock },
 		{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kDirt,  Feature::kRock },
-		{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kDirt,  Feature::kBrush, Feature::kDirt,  Feature::kDirt,  Feature::kRock },
+		{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kHerd,  Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kRock },
 		{ Feature::kRock, Feature::kDirt,  Feature::kBrush, Feature::kDirt,  Feature::kDirt, Feature::kRock,  Feature::kWater, Feature::kDirt,  Feature::kDirt,  Feature::kRock },
-		{ Feature::kRock, Feature::kWater, Feature::kDirt,  Feature::kRock,  Feature::kDirt, Feature::kBrush, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kRock },
+		{ Feature::kRock, Feature::kWater, Feature::kDirt,  Feature::kRock,  Feature::kDirt, Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kRock },
 		{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kRock,  Feature::kRock },
 		{ Feature::kRock, Feature::kBrush, Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kDirt,  Feature::kRock },
 		{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kWater, Feature::kDirt,  Feature::kDirt,  Feature::kBrush, Feature::kRock },
 		{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kRock },
 		{ Feature::kRock, Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock, Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock }
 	}, // TODO: Generate?
-	herd_(1, 5)
+	herd_(2, 5)
 {
 }
 
