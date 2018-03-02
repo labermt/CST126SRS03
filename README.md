@@ -2,7 +2,11 @@
 Elephant
 
 
+<<<<<<< HEAD
 Class ID: Seadra
+=======
+Class ID: Seadra and 
+>>>>>>> 11efb092ad56d1a95c718214b0f5983bb2435fce
 
 SRS ID: CST126SRS03
 
