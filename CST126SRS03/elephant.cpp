@@ -2,7 +2,6 @@
 #include "elephant.h"
 #include <cassert>
 
-<<<<<<< HEAD
 // Methods to implement in heirarchal order: eleTrail, isStuck, isNecesity, retraceTrail
 
 /* void eleTrail()
@@ -10,8 +9,6 @@
 	
 } */
 
-=======
->>>>>>> 790d887f001f5121b70e7a2fc2ef6354e408b727
 bool movable(Preserve::Feature const terrain)
 {
 	auto result = false;
