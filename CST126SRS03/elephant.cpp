@@ -8,16 +8,12 @@ void dodgeObstacle();
 
 void Elephant::tag(GPS& gps)
 {
-<<<<<<< HEAD
-	   GPS* getGps_();
-=======
-	GPS* getGps_();
->>>>>>> 4087efdf83d5cb2836685e045600cfcb20c2f274
+	gps_= &gps;
 }
 
 void Elephant::findHerd()
 {
-	while (GPS* != Preserve::Feature::kHerd) //this doesn't make sense yet, working on that.
+	while (look() != Preserve::Feature::kHerd) //this doesn't make sense yet, working on that.
 	{
 		auto destination = Elephant::listen();
 
