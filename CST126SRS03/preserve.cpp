@@ -25,10 +25,18 @@ Preserve::Preserve():
 
 Preserve::Feature Preserve::getFeature(const int lat, const int lng) const
 {
+	auto herdLat{ herd_.getlat() };
+	auto herdLng{ herd_.getlng() };
+
 	auto result = Feature::kRock;
+
 	if (lat >= 0 && lat < latExtent && lng >= 0 && lng < lngExtent)
 	{
 		result = feature_[lat][lng];
+		if (lat == herdLat && lng == herdLng)
+		{
+			result = Feature::kHerd;
+		}
 	}
 
 	return result;
