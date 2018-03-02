@@ -71,8 +71,6 @@ void Elephant::findHerd()
 		if (look(Turn::kForward) == Preserve::Feature::kRock ||
 			look(Turn::kForward) == Preserve::Feature::kBrush)
 		{
-			
-
 			//Check obstacle left
 			if (look(Turn::kLeft) == Preserve::Feature::kRock ||
 				look(Turn::kLeft) == Preserve::Feature::kBrush) 
@@ -84,39 +82,28 @@ void Elephant::findHerd()
 					turn(Turn::kRight);
 					turn(Turn::kRight);
 					move();
+					turn(Turn::kRight);
 
-					//elephant is lost at this point
-					throw;
-
-					/* 
-					//This code may be implemented once I can figure out a reliable solution
-					if (look(Turn::kRight) == Preserve::Feature::kRock ||
-						look(Turn::kRight) == Preserve::Feature::kBrush) {
-
-						
-					}
-					else {
-						turn(Turn::kRight);
-						move();
-						turn(Turn::kRight);
-					}
-					*/
-
+					//elephant is stuck in a U?
+					//Somehow store the gps location of bad spot / treat it as an obstacle
 				}
-				else { //ERROR HERE FOR SOME REASON WHEN TESTING
+				else
+				{ //ERROR HERE FOR SOME REASON WHEN TESTING
 					turn(Turn::kRight);
 					move();
 					turn(Turn::kLeft);
 				}
 			}
-			else {
+			else 
+			{
 				turn(Turn::kLeft);
 				move();
 				turn(Turn::kRight);
 			}
 
 		}
-		else {
+		else 
+		{
 			move();
 		}
 	}
