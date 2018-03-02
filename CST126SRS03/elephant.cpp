@@ -4,8 +4,6 @@
 #include "direction.h"
 #include "gps.h"
 
-void dodgeObstacle(Loxodonta::Turn heading);
-
 void Elephant::tag(GPS& gps)
 {
 	Loxodonta::setGps(gps); 
@@ -49,19 +47,20 @@ void Elephant::findHerd()
 	}
 }
 
-void dodgeObstacle(Loxodonta::Turn heading) //I've got it set up, but it doesn't like it for some reasons, going to check on that later.
+void Elephant::dodgeObstacle(Loxodonta::Turn heading) //I've got it set up, but it doesn't like it for some reasons, going to check on that later.
 {
-	switch (heading) {
-	case Loxodonta::Turn::kForward : Loxodonta::turn(Loxodonta::Turn::kLeft);
-	case Loxodonta::Turn::kRight : Loxodonta::move();
-		Loxodonta::turn(Loxodonta::Turn::kRight);
-		while (Loxodonta::look(Loxodonta::Turn::kRight) != Preserve::Feature::kRock || Elephant::Loxodonta::look(Loxodonta::Turn::kRight) != Preserve::Feature::kBrush)
-			Elephant::move();
-		break;
-	case Loxodonta::Turn::kLeft : Elephant::move();
-		turn(Loxodonta::Turn::kLeft);
-		while (look(Loxodonta::Turn::kLeft) != Preserve::Feature::kRock || look(Loxodonta::Turn::kLeft) != Preserve::Feature::kBrush)
-			Elephant::move();
-		break;
+	switch (heading) 
+	{
+		case Loxodonta::Turn::kForward : turn(Loxodonta::Turn::kLeft);
+		case Loxodonta::Turn::kRight : Loxodonta::move();
+			turn(Loxodonta::Turn::kRight);
+			while (Loxodonta::look(Loxodonta::Turn::kRight) != Preserve::Feature::kRock || Elephant::Loxodonta::look(Loxodonta::Turn::kRight) != Preserve::Feature::kBrush)
+				Loxodonta::move();
+			break;
+		case Loxodonta::Turn::kLeft : Elephant::move();
+			turn(Loxodonta::Turn::kLeft);
+			while (look(Loxodonta::Turn::kLeft) != Preserve::Feature::kRock || look(Loxodonta::Turn::kLeft) != Preserve::Feature::kBrush)
+				Loxodonta::move();
+			break;
 	}
 }
