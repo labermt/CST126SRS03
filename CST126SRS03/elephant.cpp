@@ -4,32 +4,30 @@
 #include "direction.h"
 #include "gps.h"
 
-void dodgeObstacle();
-
 void Elephant::tag(GPS& gps)
 {
-	gps_= &gps;
+	Loxodonta::setGps(gps); 
 }
 
 void Elephant::findHerd()
 {
-	while (look() != Preserve::Feature::kHerd) //this doesn't make sense yet, working on that.
+	while (look() != Preserve::Feature::kHerd)
 	{
-		auto destination = Elephant::listen();
+		auto destination = Loxodonta::listen();
 
 		if (destination == 0)
 		{
 			auto lookingAt = look(Turn::kForward);
 			if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
-				dodgeObstacle();
+				dodgeObstacle(Loxodonta::Turn::kForward);
 			else
-				Elephant::move();
+				Loxodonta::move();
 		}
 		else if (destination == 90)
 		{
 			auto lookingAt = look(Turn::kRight);
 			if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
-				dodgeObstacle();
+				dodgeObstacle(Loxodonta::Turn::kRight);
 			else
 				turn(Turn::kRight);
 		}
@@ -37,7 +35,7 @@ void Elephant::findHerd()
 		{
 			auto lookingAt = look(Turn::kLeft);
 			if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
-				dodgeObstacle();
+				dodgeObstacle(Loxodonta::Turn::kLeft);
 			else
 				turn(Turn::kLeft);
 		}
@@ -45,21 +43,24 @@ void Elephant::findHerd()
 		{
 			turn(Turn::kLeft);
 		}
+		Loxodonta::move();
 	}
 }
 
-void dodgeObstacle() //My new working project
+void Elephant::dodgeObstacle(Loxodonta::Turn heading) //I've got it set up, but it doesn't like it for some reasons, going to check on that later.
 {
-	if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
+	switch (heading) 
 	{
-		if (lookLeft == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
-		{
-			turn(Turn::kRight);
-			turn(Turn::kRight);
-			lookingAt = look(Turn::kForward);
-			if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
-				bool iMightBeStuck = true;
-			else
-		}
+		case Loxodonta::Turn::kForward : turn(Loxodonta::Turn::kLeft);
+		case Loxodonta::Turn::kRight : Loxodonta::move();
+			turn(Loxodonta::Turn::kRight);
+			while (Loxodonta::look(Loxodonta::Turn::kRight) != Preserve::Feature::kRock || Elephant::Loxodonta::look(Loxodonta::Turn::kRight) != Preserve::Feature::kBrush)
+				Loxodonta::move();
+			break;
+		case Loxodonta::Turn::kLeft : Elephant::move();
+			turn(Loxodonta::Turn::kLeft);
+			while (look(Loxodonta::Turn::kLeft) != Preserve::Feature::kRock || look(Loxodonta::Turn::kLeft) != Preserve::Feature::kBrush)
+				Loxodonta::move();
+			break;
 	}
 }
