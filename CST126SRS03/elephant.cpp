@@ -2,9 +2,6 @@
 #include "elephant.h"
 #include <cassert>
 
-// Qs for Mitch
-
-
 bool movable(Preserve::Feature const terrain)
 {
 	auto result = false;
