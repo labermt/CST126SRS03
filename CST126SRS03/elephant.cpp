@@ -21,15 +21,6 @@ void Elephant::findHerd()
 			assert(false); // Let Mitch know
 		}
 
-		const auto focusDirection = listen();
-		auto heading = getHeading(Turn::kForward);
-		auto lookForward = look(Turn::kForward);
-		auto lookRight = look(Turn::kRight);
-		auto lookLeft = look(Turn::kLeft);
-		auto forwardClear = lookForward == Preserve::Feature::kGrass || lookForward == Preserve::Feature::kDirt || lookForward == Preserve::Feature::kWater || lookForward == Preserve::Feature::kHerd;
-		auto rightClear = lookRight == Preserve::Feature::kGrass || lookRight == Preserve::Feature::kDirt || lookRight == Preserve::Feature::kWater || lookRight == Preserve::Feature::kHerd;
-		auto leftClear = lookLeft == Preserve::Feature::kGrass || lookLeft == Preserve::Feature::kDirt || lookLeft == Preserve::Feature::kWater || lookLeft == Preserve::Feature::kHerd;
-
 		if (getWeight() - getMinWeight() < 80)
 		{
 			if (feature == Preserve::Feature::kGrass)
@@ -81,6 +72,18 @@ void Elephant::findHerd()
 		{
 			sleep();
 		}
+
+		const auto focusDirection = listen();
+		const auto heading = getHeading(Turn::kForward);
+
+		const auto lookForward = look(Turn::kForward);
+		const auto forwardClear = lookForward == Preserve::Feature::kGrass || lookForward == Preserve::Feature::kDirt || lookForward == Preserve::Feature::kWater || lookForward == Preserve::Feature::kHerd;
+
+		auto lookRight = look(Turn::kRight);
+		auto rightClear = lookRight == Preserve::Feature::kGrass || lookRight == Preserve::Feature::kDirt || lookRight == Preserve::Feature::kWater || lookRight == Preserve::Feature::kHerd;
+
+		auto lookLeft = look(Turn::kLeft);
+		auto leftClear = lookLeft == Preserve::Feature::kGrass || lookLeft == Preserve::Feature::kDirt || lookLeft == Preserve::Feature::kWater || lookLeft == Preserve::Feature::kHerd;
 
 		const auto directionDifference = getHeading(Turn::kForward) - focusDirection;
 		switch ((directionDifference + 360) % 360)
