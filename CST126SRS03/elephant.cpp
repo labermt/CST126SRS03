@@ -3,7 +3,32 @@
 #include "preserve.h"
 #include "elephant.h"
 #include "loxodonta.h"
+#include <cassert>
 
+// Genius code from Colin (Seadra) https://github.com/SeadraCST126/CST126SRS03/blob/master/CST126SRS03/elephant.cpp
+bool canMove(Preserve::Feature const terrain)
+{
+	auto result = false;
+	switch (terrain)
+	{
+	case Preserve::Feature::kUnknown:
+	case Preserve::Feature::kRock:
+	case Preserve::Feature::kBrush:
+		break;
+
+	case Preserve::Feature::kDirt:
+	case Preserve::Feature::kGrass:
+	case Preserve::Feature::kWater:
+	case Preserve::Feature::kHerd:
+		result = true;
+		break;
+
+	default:
+		assert(false);
+		break;
+	}
+	return result;
+}
 void Elephant::tag( GPS& gps)
 {
 	setGps(gps);
@@ -76,7 +101,6 @@ void Elephant::findHerd()
 				turn(Turn::kRight);
 			}
 		}
-
 
 		move(); 
 	}
