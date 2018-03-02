@@ -21,7 +21,6 @@ Preserve::Preserve():
 	}, // TODO: Generate?
 	herd_(1, 5)
 {
-	feature_[herd_.getlat()][herd_.getlng()] = Feature::kHerd;
 }
 
 Preserve::Feature Preserve::getFeature(const int lat, const int lng) const

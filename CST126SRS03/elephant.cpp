@@ -8,7 +8,7 @@ using namespace std;
 
 void Elephant::tag(GPS& gps)
 {
-	gps_ = &gps;
+	setGps(gps);
 }
 
 void Elephant::findHerd()
