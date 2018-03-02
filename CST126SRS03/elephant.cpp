@@ -39,10 +39,69 @@ void Elephant::findHerd()
 	
 	while(!found_heard)
 	{
-		auto const herd_dir = getHeading(Turn::kForward) - listen();
-		switch(herd_dir)
+		if (isThirsty() && look() == Preserve::Feature::kWater)
 		{
-			case 0:
+			drink();
+		}
+
+		if (getWeight() <= (getMaxWeight() / 2) && look() == Preserve::Feature::kGrass || look(Turn::kForward) == Preserve::Feature::kBrush)
+		{
+			eat();
+		}
+
+		auto const herd_dir = listen();
+		auto const heading = getHeading(Turn::kForward);
+		
+		if (heading != herd_dir)
+		{
+			if (getHeading(Turn::kRight) == herd_dir)
+			{
+				if(movable(look(Turn::kRight)))
+				{
+					turn(Turn::kRight);
+					move();
+				}
+				else if(movable(look(Turn::kForward)))
+				{
+					move();
+				}
+				else
+				{
+					turn(Turn::kLeft);
+					move();
+				}
+			}
+			else if (getHeading(Turn::kLeft) == herd_dir)
+			{
+				if(movable(look(Turn::kLeft)))
+				{
+					turn(Turn::kLeft);
+					move();
+				}
+				else if (movable(look(Turn::kForward)))
+				{
+					move();
+				}
+				else
+				{
+					turn(Turn::kRight);
+					move();
+				}
+			}
+			else
+			{
+				if (movable(look(Turn::kForward)))
+				{
+					move();
+				}
+				else
+				{
+					assert(false);
+				}
+			}
+		}
+		else
+		{
 			if(movable(look(Turn::kForward)))
 			{
 				move();
@@ -52,95 +111,17 @@ void Elephant::findHerd()
 				turn(Turn::kRight);
 				move();
 			}
-			else if(movable(look(Turn::kLeft)))
-			{
-				turn(Turn::kLeft);
-				move();
-			}
 			else
 			{
 				turn(Turn::kLeft);
-				turn(Turn::kLeft);
-				// mark gps spot as immovable
-				move();
-				turn(Turn::kRight);
-			}
-			break;
-
-			case 90:
-			if(movable(look(Turn::kRight)))
-			{
-				turn(Turn::kRight);
 				move();
 			}
-			else if(movable(look(Turn::kForward)))
-			{
-				move();
-			}
-			//not sure if I want this case to be turn right or turn back
-			else if(movable(look(Turn::kLeft)))
-			{
-				turn(Turn::kLeft);
-				move();
-			}
-			else
-			{
-				turn(Turn::kLeft);
-				turn(Turn::kLeft);
-				// mark gps spot as immovable
-				move();
-				turn(Turn::kRight);
-			}
-			break;
-
-			case 270:
-			if(movable(look(Turn::kLeft)))
-			{
-				turn(Turn::kLeft);
-				move();
-			}
-			else if(movable(look(Turn::kForward)))
-			{
-				move();
-			}
-			//not sure if I want this case to be turn right or turn back
-			else if(movable(look(Turn::kRight)))
-			{
-				turn(Turn::kRight);
-				move();
-			}
-			else
-			{
-				turn(Turn::kRight);
-				turn(Turn::kRight);
-				// mark gps spot as immovable
-				move();
-				turn(Turn::kLeft);
-			}
-			break;
-			
-			case 180:
-			//not sure what to do if 180
-			break;
-
-			default:
-			assert(false);
-			break;
 		}
-
-		if(isThirsty() && look() == Preserve::Feature::kWater )
-		{
-			drink();
-		}
-		
-		if(getWeight() <= (getMaxWeight() / 2) && look() == Preserve::Feature::kGrass || look(Turn::kForward) == Preserve::Feature::kBrush )
-		{
-			eat();
-		}
-		if(look()== Preserve::Feature::kHerd)
+		if (look() == Preserve::Feature::kHerd)
 		{
 			found_heard = true;
 		}
+
 	}
 }
 
