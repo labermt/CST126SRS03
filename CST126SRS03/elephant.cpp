@@ -2,12 +2,31 @@
 #include "elephant.h"
 #include <cassert>
 
-// Methods to implement in heirarchal order: eleTrail, isStuck, isNecesity, retraceTrail
+// Methods to implement in heirarchal order: isStuck(), eleTracks()
 
-/* void eleTrail()
+ /* void elephantTracks()
 {
-	
+
+
+
 } */
+
+/* void isStuck()
+ {
+
+//check for first stuck instance (wall)
+
+		loop, follow wall and look while following wall until movable terrain is found then move into that coordinate
+
+//check for second stuck instance (U)
+
+		check by looking in all directions til movable is found, then turn til heading movable terrain, then move out and around the U
+
+//check for third stuck instance (diagonal wall)
+
+		loop, follow wall and look while following wall until movable terrain is found then move into that coordinate
+
+ } */
 
 bool movable(Preserve::Feature const terrain)
 {
@@ -56,7 +75,7 @@ void Elephant::findHerd()
 		auto const herd_dir = listen();
 		auto const heading = getHeading(Turn::kForward);
 		
-		if (heading != herd_dir)
+		if (heading != herd_dir) //Elephant listens and if not heading herd_dir, turns and moves to herd_dir
 		{
 			if (getHeading(Turn::kRight) == herd_dir)
 			{
@@ -92,9 +111,9 @@ void Elephant::findHerd()
 					move();
 				}
 			}
-			else
+			else //Herd is not left or right
 			{
-				if (movable(look(Turn::kForward)))
+				if (movable(look(Turn::kForward))) //herd is forward
 				{
 					move();
 				}
@@ -106,10 +125,27 @@ void Elephant::findHerd()
 					turn(Turn::kLeft);
 
 					//Redetermine herds' location.
+					if (heading == herd_dir)
+					{
+						if (movable(look(Turn::kForward)))
+						{
+							move();
+						}
+						else
+						{
+							assert(false);
+						}
+					}
+					else
+					{
+						assert(false);
+
+						//isStuck();
+					}
 				}
 			}
 		}
-		else
+		else //Moving towards herd already
 		{
 			if(movable(look(Turn::kForward)))
 			{
@@ -120,10 +156,16 @@ void Elephant::findHerd()
 				turn(Turn::kRight);
 				move();
 			}
-			else
+			else if(movable(look(Turn::kLeft)))
 			{
 				turn(Turn::kLeft);
 				move();
+			}
+			else
+			{
+				assert(false);
+
+				//isStuck();
 			}
 		}
 		if (look() == Preserve::Feature::kHerd)
