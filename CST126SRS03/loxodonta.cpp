@@ -225,7 +225,12 @@ void Elephant::move()
 	}
 }
 
+void Elephant::tag(GPS & gps)
+{
+	gps_ = &gps; 
+}
+
 void Elephant::findHerd()
 {
-
+	
 }
