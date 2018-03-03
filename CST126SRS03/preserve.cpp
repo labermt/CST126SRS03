@@ -33,6 +33,7 @@ Preserve::Feature Preserve::getFeature(const int lat, const int lng) const
 
 		const auto herdLat{ herd_.getlat() };
 		const auto herdLng{ herd_.getlng() };
+
 		if (lat == herdLat && lng == herdLng)
 		{
 			result = Feature::kHerd;
