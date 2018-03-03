@@ -165,6 +165,12 @@ Direction Loxodonta::getHeading(const Turn turn) const
 	return result;
 }
 
+Direction Loxodonta::getHeading() const
+{
+	const auto result{ getHeading(Turn::kForward) };
+	return result;
+}
+
 Preserve::Feature Loxodonta::look(const Turn turn) const
 {
 	auto result{ Preserve::Feature::kUnknown };
@@ -213,9 +219,9 @@ void Loxodonta::sleep()
 
 void Loxodonta::drink()
 {
-	const auto feature{ look() };
-
 	incrementTime(5);
+
+	const auto feature{ look() };
 	if (feature == Preserve::Feature::kWater)
 	{
 		water_ = kMaxWater;
@@ -252,7 +258,7 @@ void Loxodonta::turn(const Turn turn)
 void Loxodonta::move()
 {
 	incrementTime(60);
-	decrementWater(20);
+	decrementWater(10);
 	decrementWeight(20);
 	if (gps_ != nullptr)
 	{
