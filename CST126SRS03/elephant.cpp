@@ -4,8 +4,6 @@
 
 // Methods to implement in heirarchal order: isStuck()
 
-bool movable(Preserve::Feature const terrain);
-
 /* void isStuck()
  {
 	
@@ -79,6 +77,7 @@ void Elephant::findHerd()
 					turn(Turn::kRight);
 					move();
 				}
+				//can be replaced with isStuck() \/
 				else if(movable(look(Turn::kForward)))
 				{
 					move();
@@ -96,6 +95,7 @@ void Elephant::findHerd()
 					turn(Turn::kLeft);
 					move();
 				}
+				//can be replaced with isStuck() \/
 				else if (movable(look(Turn::kForward)))
 				{
 					move();
@@ -108,36 +108,10 @@ void Elephant::findHerd()
 			}
 			else //Herd is not left or right
 			{
-				if (movable(look(Turn::kForward))) //herd is forward
-				{
-					move();
-				}
-				else //Herd is behind Elephant and or if there is an immovable obj
-				{
-					//assert(false);
+				//Herd is behind Elephant 
 
 					turn(Turn::kLeft);
 					turn(Turn::kLeft);
-
-					//Redetermine herds' location.
-					if (heading == herd_dir)
-					{
-						if (movable(look(Turn::kForward)))
-						{
-							move();
-						}
-						else
-						{
-							assert(false);
-						}
-					}
-					else
-					{
-						assert(false);
-
-						//isStuck();
-					}
-				}
 			}
 		}
 		else //Moving towards herd already
@@ -146,6 +120,7 @@ void Elephant::findHerd()
 			{
 				move();
 			}
+			//else isStuck() can replace this \/
 			else if(movable(look(Turn::kRight)))
 			{
 				turn(Turn::kRight);
@@ -155,12 +130,6 @@ void Elephant::findHerd()
 			{
 				turn(Turn::kLeft);
 				move();
-			}
-			else
-			{
-				assert(false);
-
-				//isStuck();
 			}
 		}
 		if (look() == Preserve::Feature::kHerd)
@@ -223,16 +192,47 @@ void Elephant::isStuck()
 			{
 				if (!movable(look(Turn::kLeft)) && !movable(look(Turn::kRight)))
 				{
-					resolve = 3; //not just a diagonal, moves to hall case
+					assert(false); //not just a diagonal, moves to hall case
 					break;
 				}
 				else //is a diagonal
 				{
-					
+					if (!movable(look(Turn::kLeft))) //can move right
+					{
+						turn(Turn::kRight);
+						move();
+
+						if(!movable(look(Turn::kLeft)))
+						{
+							turn(Turn::kRight);
+							move();
+						}
+						else
+						{
+							turn(Turn::kLeft);
+							move();
+						}
+					}
+					else //can move left
+					{
+						turn(Turn::kLeft);
+						move();
+
+						if (!movable(look(Turn::kRight)))
+						{
+							turn(Turn::kLeft);
+							move();
+						}
+						else
+						{
+							turn(Turn::kRight);
+							move();
+						}
+					}
 					break;
 				}
 			}
-			case hall:
+			/*case hall:
 			{
 				turn(Turn::kLeft); // turns around moves out of end of hall 
 				turn(Turn::kLeft);
@@ -242,7 +242,7 @@ void Elephant::isStuck()
 				{
 					
 				}
-			}
+			} */
 			default:
 			{
 				stuck = false;

@@ -2,7 +2,7 @@
 Elephant
 
 
-Class ID: Seadra and 
+Class ID: Seadra and Mespirit
 
 SRS ID: CST126SRS03
 
