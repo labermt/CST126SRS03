@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "preserve.h"
 #include "elephant.h"
+#include <cassert>
 
-//listen look move 
 void Elephant::tag(GPS& gps)
 {
 	setGps(gps);
@@ -10,50 +10,29 @@ void Elephant::tag(GPS& gps)
 
 void Elephant::findHerd()
 {
-	const auto feature{ look() };
-	auto currentHeading{getHeading(forward)}; 
-	while (feature != Preserve::Feature::kHerd)
+	while (look() != Preserve::Feature::kHerd)
 	{
-		healthCheck(); 
+		healthCheck();
 
-		auto hearDir = listen(); 
-		turn(Turn::kLeft); 
-		auto see = look();
-		Elephant::look(); 
-		auto herdDirection = listen();
-		look();
-		turn(Turn::kLeft);
-		if (see == Preserve::Feature::kRock || see == Preserve::Feature::kBrush)
+		const auto hearDir = listen();
+		faceHerd();
+		auto see{ look(Turn::kForward) };
+		while (Preserve::isObstacle(see))
 		{
-
+			turn(Turn::kRight);
+			see = look(Turn::kForward);
 		}
-		auto herdFound{ see == Preserve::Feature::kHerd };
-		while (!herdFound)
-		{
-
-		}
-		if (isHungry())
-		{
-
-		}
-		if (isThirsty())
-		{
-
-		}
-		if (isSleepy())
-		{
-
-		}
+		move();
 	}
 }
 
 void Elephant::healthCheck()
 {
-	if (isHungry()) 
+	if (isHungry())
 	{
-		auto see = look();
-		auto grassFound{ see == Preserve::Feature::kGrass };
-		if (grassFound) 
+		const auto see = look();
+		const auto grassFound{ see == Preserve::Feature::kGrass };
+		if (grassFound)
 		{
 			eat();
 		};
@@ -61,8 +40,8 @@ void Elephant::healthCheck()
 
 	if (isThirsty())
 	{
-		auto see = look(); 
-		auto waterFound{ see == Preserve::Feature::kWater }; 
+		const auto see = look();
+		const auto waterFound{ see == Preserve::Feature::kWater };
 		if (waterFound)
 		{
 			drink();
