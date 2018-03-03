@@ -55,6 +55,8 @@ protected: // Student available methods.
 	bool isThirsty() const;
 	bool isHungry() const;
 
+	void faceHerd();
+
 	Direction getHeading(const Turn turn) const;
 	Direction getHeading() const;
 	Preserve::Feature look() const;
