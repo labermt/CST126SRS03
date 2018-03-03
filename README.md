@@ -2,40 +2,14 @@
 Elephant
 
 
-Class ID: 
+Class ID: Tangela and Persian
 
 SRS ID: CST126SRS03
 
-Unresolved Issues: 
+Unresolved Issues: Obstacle avoidance is... less than optimal. The elephant can and will get stuck under certain circumstances
 
 Notes: 
 
-# Pseudocode
-
-while (not at herd)
-{
-listen
-turn towards herd
-
-check for obstacle
-if brush -> eat it
-
-look at ground
-if grass -> eat it
-if water -> drink it
-if herd -> exit while loop
-
-if obstacle
-	turn 90 degrees
-	check for obstacle
-		if obstacle -> recurse
-	move forward
-	turn -90 degrees
-	check for obstacle
-		if obstacle -> recurse
-
-move forward
-}
 
 ---
 

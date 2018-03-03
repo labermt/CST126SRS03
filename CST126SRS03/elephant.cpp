@@ -24,7 +24,7 @@ bool canMove(Preserve::Feature const terrain)
 		break;
 
 	default:
-		assert(false);
+		result = false;
 		break;
 	}
 	return result;
@@ -47,7 +47,8 @@ void Elephant::findHerd()
 		}
 
 		//Listen and turn towrard the herd
-		while (GPS::cardinal(listen()) != getHeading(Turn::kForward))
+		auto const herdHeading = GPS::cardinal(listen());
+		while (herdHeading != getHeading(Turn::kForward))
 		{
 			turn(Turn::kRight);
 		}
@@ -82,12 +83,21 @@ void Elephant::findHerd()
 				turn(Turn::kRight);
 				move();
 				turn(Turn::kLeft);
+				
+				if(herdHeading != GPS::cardinal(listen()))
+				{
+					turn(Turn::kLeft);
+					move();
+					move();
+					turn(Turn::kRight);
+				}
 			}
 			//If there is obstacle to Right
 			else if (canMove(look(Turn::kLeft)))
 			{
 				turn(Turn::kLeft);
 				move();
+				while(!canMove(look(Turn::kRight))) move();
 				turn(Turn::kRight);
 			}
 		}
