@@ -165,6 +165,12 @@ Direction Loxodonta::getHeading(const Turn turn) const
 	return result;
 }
 
+Direction Loxodonta::getHeading() const
+{
+	const auto result{ getHeading(Turn::kForward) };
+	return result;
+}
+
 Preserve::Feature Loxodonta::look(const Turn turn) const
 {
 	auto result{ Preserve::Feature::kUnknown };
@@ -213,9 +219,9 @@ void Loxodonta::sleep()
 
 void Loxodonta::drink()
 {
-	const auto feature{ look() };
-
 	incrementTime(5);
+
+	const auto feature{ look() };
 	if (feature == Preserve::Feature::kWater)
 	{
 		water_ = kMaxWater;
@@ -252,10 +258,45 @@ void Loxodonta::turn(const Turn turn)
 void Loxodonta::move()
 {
 	incrementTime(60);
-	decrementWater(20);
+	decrementWater(10);
 	decrementWeight(20);
 	if (gps_ != nullptr)
 	{
-		gps_->move(heading_, 1);
+		const Preserve::Feature feature{ look(Turn::kForward) };
+		if (!Preserve::isObstacle(feature))
+		{
+			gps_->move(heading_, 1);
+		}
+	}
+}
+
+void Loxodonta::faceHerd()
+{
+	const Direction heading{ getHeading() };
+	const int herdDirection{ listen() };
+	const auto deltaAngle{ herdDirection - heading };
+
+	const auto deltaTheta = GPS::rangeTheta(deltaAngle);
+
+	if (deltaTheta >= 315 || deltaTheta < 45)
+	{
+		turn(Turn::kForward);
+	}
+	else if (deltaTheta >= 45 && deltaTheta < 135)
+	{
+		turn(Turn::kRight);
+	}
+	else if (deltaTheta >= 135 && deltaTheta < 225)
+	{
+		turn(Turn::kRight);
+		turn(Turn::kRight);
+	}
+	else if (deltaTheta >= 225 && deltaTheta < 315)
+	{
+		turn(Turn::kLeft);
+	}
+	else
+	{
+		assert(false);
 	}
 }

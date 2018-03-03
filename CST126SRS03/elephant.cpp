@@ -8,23 +8,19 @@
 
 void Elephant::tag(GPS& gps)
 {
-	gps_ = &gps; //THIS DOESN'T WORK NOW WITH MITCH"S NEW INHERITANCE COMMIT??
+	setGps(gps);
 }
 void Elephant::findHerd()
 {
 	bool foundHerd{ false };
-	int herdDirection;
-	//Direction direction;
 
 	while (!foundHerd)
 	{
-		//search for herd
-
+		//herd not found, search for herd
 		Preserve::Feature feature;
 
-		//FIRST, SURVIVE
 		//Look in all directions for herd
-		Turn turns[4] = { Turn::k0, Turn::kForward, Turn::kLeft , Turn::kRight };
+		const Turn turns[4] = { Turn::k0, Turn::kForward, Turn::kLeft , Turn::kRight };
 		for (Turn turn : turns) {
 			feature = look(turn);
 
@@ -34,90 +30,87 @@ void Elephant::findHerd()
 				break;
 			}
 		}
+		if (foundHerd) break;
+		
+		//survive
 		feature = look();
+		survive(feature);
 
-		//Deal with hunger
-		if (isHungry() && feature == Preserve::Feature::kGrass) eat(); //eat grass
-		if (isHungry() && look(Turn::kForward) == Preserve::Feature::kBrush) eat(); //eat brush
+		//move!
+		moveTowardsHerd();
+	}
+}
 
-		//Deal with thirst
-		if (isThirsty() && feature == Preserve::Feature::kWater) drink();
+void Elephant::survive(Preserve::Feature& feature)
+{
+	//Deal with hunger
+	if (isHungry() && feature == Preserve::Feature::kGrass) eat(); //eat grass
+	if (isHungry() && look(Turn::kForward) == Preserve::Feature::kBrush) eat(); //eat brush
 
-		//Sleep if sleepy
-		if (isSleepy()) sleep();
+	//Deal with thirst
+	if (isThirsty() && feature == Preserve::Feature::kWater) drink();
 
+	//Sleep if sleepy
+	if (isSleepy()) sleep();
+}
 
-		//SECOND, LISTEN FOR HERD
-		herdDirection = listen();
+void Elephant::moveTowardsHerd()
+{
+	//Face towards herd
+	faceHerd();
 
-		if (herdDirection == 0) {
-			turn(Turn::kForward);
-		}
-		else if (herdDirection == 90) {
-			turn(Turn::kRight);
-		}
-		else if (herdDirection == 180) {
-			turn(Turn::kRight);
-			turn(Turn::kRight);
-		}
-		else if (herdDirection == 270) {
-			turn(Turn::kLeft);
-		}
-
-
-		//THIRD, detect if obstacles are in front of elephant
-		if (look(Turn::kForward) == Preserve::Feature::kRock ||
-			look(Turn::kForward) == Preserve::Feature::kBrush)
+	//detect if obstacles are in front of elephant
+	if (look(Turn::kForward) == Preserve::Feature::kRock ||
+		look(Turn::kForward) == Preserve::Feature::kBrush)
+	{
+		//Check obstacle left
+		if (look(Turn::kLeft) == Preserve::Feature::kRock ||
+			look(Turn::kLeft) == Preserve::Feature::kBrush)
 		{
-			
-
-			//Check obstacle left
-			if (look(Turn::kLeft) == Preserve::Feature::kRock ||
-				look(Turn::kLeft) == Preserve::Feature::kBrush) 
+			//check obstacle right
+			if (look(Turn::kRight) == Preserve::Feature::kRock ||
+				look(Turn::kRight) == Preserve::Feature::kBrush)
 			{
-				//check obstacle right
-				if (look(Turn::kRight) == Preserve::Feature::kRock ||
-					look(Turn::kRight) == Preserve::Feature::kBrush)
-				{
-					turn(Turn::kRight);
-					turn(Turn::kRight);
-					move();
+				//elephant is stuck in a U
+				//move out of U to the right
+				//may not work in all circumstances
 
-					//elephant is lost at this point
-					throw;
-
-					/* 
-					//This code may be implemented once I can figure out a reliable solution
-					if (look(Turn::kRight) == Preserve::Feature::kRock ||
-						look(Turn::kRight) == Preserve::Feature::kBrush) {
-
-						
-					}
-					else {
-						turn(Turn::kRight);
-						move();
-						turn(Turn::kRight);
-					}
-					*/
-
-				}
-				else {
-					turn(Turn::kRight);
-					move();
-					turn(Turn::kLeft);
-				}
-			}
-			else {
-				turn(Turn::kLeft);
+				turn(Turn::kRight);
+				turn(Turn::kRight);
 				move();
 				turn(Turn::kRight);
+				move();
+				move();
+				turn(Turn::kLeft);
+				move();
 			}
-
+			else
+			{
+				turn(Turn::kRight);
+				move();
+				turn(Turn::kLeft);
+				move();
+				move();
+				turn(Turn::kLeft);
+				move();
+			}
 		}
-		else {
+		else
+		{
+			//move around object in front
+			turn(Turn::kLeft);
+			move();
+			turn(Turn::kRight);
+			move();
+			move();
+			turn(Turn::kRight);
 			move();
 		}
-		
-			
+
+	}
+	else
+	{
+		//no obstacles, just move forward
+		move();
 	}
 }
