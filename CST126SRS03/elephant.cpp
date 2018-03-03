@@ -1,8 +1,5 @@
 #include "stdafx.h"
 #include "elephant.h"
-#include "preserve.h"
-#include "direction.h"
-#include "gps.h"
 
 void Elephant::tag(GPS& gps)
 {
@@ -22,14 +19,13 @@ void Elephant::findHerd()
 		if (look() != Preserve::Feature::kWater && isSleepy())
 			sleep();
 
-		auto destination = Loxodonta::listen();
 		faceHerd();
 
 		auto lookingAt = look(Turn::kForward);
 		if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
 		{
-			//while (lookingAt == Preserve::Feature::kBrush && getWeight() < 5900)
-			//	eat();
+			while (lookingAt == Preserve::Feature::kBrush && getWeight() < 5900)
+				eat();
 			dodgeObstacle();
 		}
 		else
@@ -50,4 +46,3 @@ void Elephant::dodgeObstacle()
 
 	return;
 }
-
