@@ -11,8 +11,6 @@ using std::endl;
 
 struct Brain
 {
-	int currentLatitude;
-	int currentLongitude;
 	int directionOfHerd;
 
 	Direction currentDirection;
@@ -51,7 +49,6 @@ struct DirectionToHead
 
 char* getStringDirection(int direction);
 char* getStringFeature(Preserve::Feature feature);
-void displayDiagnostics(Brain& memory);
 void determineObstacles(Brain& memory);
 bool determineIfCanMoveInTheDirectionWeWantTo(int directionWeWantToHead, Brain &memory, DirectionToHead &directionToHead);
 Preserve::Feature lookBehindMe(GPS* gps, Direction heading);
@@ -71,40 +68,6 @@ char featureRock[] = "Rock";
 char featureBrush[] = "Brush";
 char featureGrass[] = "Grass";
 char featureWater[] = "Water";
-
-void displayDiagnostics(Brain& memory)
-{
-	cout << "------- Current Info --------" << endl;
-	cout << endl;
-	cout << "\t" << "Current Latitude: " << memory.currentLatitude << endl;
-	cout << "\t" << "Current Longitude: " << memory.currentLongitude << endl;
-	cout << "\t" << "Current Direction: " << getStringDirection(memory.currentDirection) << endl;
-	cout << "\t" << "Direction of herd: " << getStringDirection(memory.directionOfHerd) << endl;
-	cout << "\t" << "\t" << "Last direction of herd: " << getStringDirection(memory.lastDirectionOfHerd) << endl;
-	cout << "\t" << "\t" << "Second to last direction of herd: " << getStringDirection(memory.secondToLastDirectionOfHerd) << endl;
-	cout << endl;
-	cout << "\t" << "Feature under me: " << getStringFeature(memory.featureUnderMe) << endl;
-	cout << "\t" << "Feature in front of me: " << getStringFeature(memory.featureInFrontOfMe) << endl;
-	cout << "\t" << "Feature left of me: " << getStringFeature(memory.featureLeftOfMe) << endl;
-	cout << "\t" << "Feature right of me: " << getStringFeature(memory.featureRightOfMe) << endl;
-	cout << "\t" << "Feature behind me: " << getStringFeature(memory.featureBehindMe) << endl;
-	cout << endl;
-	cout << "\t" << "is the elephant hungry? " << memory.isHungry << endl;
-	cout << "\t" << "\t" << "Weight: " << memory.weight << endl;
-	cout << "\t" << "is brush near me? " << memory.brushNearMe << endl;
-	cout << "\t" << "is grass near me? " << memory.grassNearMe << endl;
-	cout << endl;
-	cout << "\t" << "is the elephant thirsty? " << memory.isThirsty << endl;
-	cout << "\t" << "\t" << "Water level: " << memory.water << endl;
-	cout << "\t" << "is water near me? " << memory.waterNearMe << endl;
-	cout << endl;
-	cout << "\t" << "is the elephant sleepy? " << memory.isSleepy << endl;
-	cout << endl;
-	cout << "\t" << "Obstacle in front of me: " << memory.obstacleInFrontOfMe << endl;
-	cout << "\t" << "Obstacle left of me: " << memory.obstacleLeftOfMe << endl;
-	cout << "\t" << "Obstacle right of me: " << memory.obstacleRightOfMe << endl;
-	cout << "\t" << "Obstacle behind me: " << memory.obstacleBehindMe << endl;
-}
 
 char* getStringDirection(int direction)
 {
@@ -197,7 +160,7 @@ bool isGrassNearMe(Brain& memory)
 
 void Elephant::tag(GPS& gps)
 {
-	gps_ = &gps;
+	setGps(gps);
 }
 
 void Elephant::findHerd()
@@ -236,9 +199,6 @@ void Elephant::findHerd()
 		memory.featureRightOfMe = look(Turn::kRight);
 		memory.featureBehindMe = lookBehindMe(getGps_(), memory.currentDirection);
 
-		memory.currentLatitude = getGps_()->getlat();
-		memory.currentLongitude = getGps_()->getlng();
-
 		memory.isHungry = isHungry();
 		memory.isThirsty = isThirsty();
 		memory.isSleepy = isSleepy();
@@ -251,10 +211,6 @@ void Elephant::findHerd()
 		memory.grassNearMe = isGrassNearMe(memory);
 
 		determineObstacles(memory);
-
-		displayDiagnostics(memory);
-
-		cout << endl;
 
 		if (memory.featureUnderMe == Preserve::Feature::kHerd)
 		{
@@ -363,7 +319,7 @@ void Elephant::findHerd()
 
 				if (!directionFound)
 				{
-					cout << "Error: cannot go in direction not yet tried" << endl;
+					// do something to handle blockade
 				}
 			}
 
