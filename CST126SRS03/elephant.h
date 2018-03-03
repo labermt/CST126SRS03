@@ -14,6 +14,7 @@ public:
 public: // Student to implement methods: 
 	void tag(GPS& gps); 
 	void findHerd();
+
 private: 
 	void healthCheck();
 };
