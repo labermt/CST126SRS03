@@ -1,17 +1,21 @@
 #include "stdafx.h"
-#include "elephant.h"
 #include "preserve.h"
+#include "elephant.h"
+
 //listen look move 
 void Elephant::tag(GPS& gps)
 {
-	gps_ = &gps; 
+	setGps(gps);
 }
+
 void Elephant::findHerd()
 {
 	const auto feature{ look() };
-	//const auto feature = look(); this is another way to rewrite line 13 
-	while (feature != Preserve::Feature::kHerd);
+	auto currentHeading{getHeading(forward)}; 
+	while (feature != Preserve::Feature::kHerd)
 	{
+		healthCheck(); 
+
 		auto hearDir = listen(); 
 		turn(Turn::kLeft); 
 		auto see = look();
@@ -43,3 +47,30 @@ void Elephant::findHerd()
 	}
 }
 
+void Elephant::healthCheck()
+{
+	if (isHungry()) 
+	{
+		auto see = look();
+		auto grassFound{ see == Preserve::Feature::kGrass };
+		if (grassFound) 
+		{
+			eat();
+		};
+	}
+
+	if (isThirsty())
+	{
+		auto see = look(); 
+		auto waterFound{ see == Preserve::Feature::kWater }; 
+		if (waterFound)
+		{
+			drink();
+		}
+	}
+
+	if (isSleepy())
+	{
+		sleep();
+	}
+}

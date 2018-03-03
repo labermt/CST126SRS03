@@ -2,8 +2,8 @@
 
 #include <cassert>
 #include "gps.h"
+#include "loxodonta.h"
 #include "preserve.h"
-#include "elephant.h"
 
 Preserve::Preserve(): 
 	feature_
@@ -26,9 +26,17 @@ Preserve::Preserve():
 Preserve::Feature Preserve::getFeature(const int lat, const int lng) const
 {
 	auto result = Feature::kRock;
+
 	if (lat >= 0 && lat < latExtent && lng >= 0 && lng < lngExtent)
 	{
 		result = feature_[lat][lng];
+
+		const auto herdLat{ herd_.getlat() };
+		const auto herdLng{ herd_.getlng() };
+		if (lat == herdLat && lng == herdLng)
+		{
+			result = Feature::kHerd;
+		}
 	}
 
 	return result;
@@ -43,11 +51,11 @@ Preserve::Feature Preserve::getFeature(const GPS gps) const
 	return result;
 }
 
-Preserve::Feature Preserve::getFeature(const Elephant& elephant) const
+Preserve::Feature Preserve::getFeature(const Loxodonta& loxodonta) const
 {
 	auto result = Feature::kUnknown;
 
-	const auto gpsPtr{ elephant.getGps_() };
+	const auto gpsPtr{ loxodonta.getGps_() };
 
 	if (gpsPtr != nullptr)
 	{
@@ -76,7 +84,7 @@ void Preserve::setFeature(const GPS gps, const Feature feature)
 	setFeature(lat, lng, feature);
 }
 
-int Preserve::getHerdDirection(const Elephant& elephant) const
+int Preserve::getHerdDirection(const Loxodonta& elephant) const
 {
 	auto result = 360;
 
