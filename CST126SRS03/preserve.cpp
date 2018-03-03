@@ -25,14 +25,14 @@ Preserve::Preserve():
 
 Preserve::Feature Preserve::getFeature(const int lat, const int lng) const
 {
-	auto herdLat{ herd_.getlat() };
-	auto herdLng{ herd_.getlng() };
-
 	auto result = Feature::kRock;
 
 	if (lat >= 0 && lat < latExtent && lng >= 0 && lng < lngExtent)
 	{
 		result = feature_[lat][lng];
+
+		const auto herdLat{ herd_.getlat() };
+		const auto herdLng{ herd_.getlng() };
 		if (lat == herdLat && lng == herdLng)
 		{
 			result = Feature::kHerd;
@@ -84,11 +84,11 @@ void Preserve::setFeature(const GPS gps, const Feature feature)
 	setFeature(lat, lng, feature);
 }
 
-int Preserve::getHerdDirection(const Loxodonta& elephant) const
+int Preserve::getHerdDirection(const Loxodonta& loxodonta) const
 {
 	auto result = 360;
 
-	const auto gpsPtr{ elephant.getGps_() };
+	const auto gpsPtr{ loxodonta.getGps_() };
 
 	if (gpsPtr != nullptr)
 	{
@@ -107,4 +107,31 @@ void Preserve::killGrass(const GPS gps)
 	{
 		setFeature(gps, Feature::kDirt);
 	}
+}
+
+bool Preserve::isObstacle(const Feature feature)
+{
+	bool result{ true };
+
+	switch (feature)
+	{
+	case Feature::kUnknown:
+	case Feature::kRock:
+	case Feature::kBrush:
+		result = true;
+		break;
+
+	case Feature::kHerd:
+	case Feature::kDirt:
+	case Feature::kGrass:
+	case Feature::kWater:
+		result = false;
+		break;
+
+	default:
+		assert(false);
+		break;
+	}
+
+	return result;
 }

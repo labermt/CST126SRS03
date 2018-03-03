@@ -39,6 +39,9 @@ public:
 		return instance;
 	}
 
+public:
+	static bool isObstacle(const Feature feature);
+
 private:
 	Feature getFeature(int lat, int lng) const;
 	void setFeature(const int lat, const int lng, const Feature feature);
