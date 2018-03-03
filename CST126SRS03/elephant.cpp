@@ -3,7 +3,6 @@
 #include "preserve.h"
 #include "elephant.h"
 #include "loxodonta.h"
-#include <cassert>
 
 // Genius code from Colin (Seadra) https://github.com/SeadraCST126/CST126SRS03/blob/master/CST126SRS03/elephant.cpp
 bool canMove(Preserve::Feature const terrain)
@@ -40,42 +39,25 @@ void Elephant::findHerd()
 
 	while (!foundHerd)
 	{
-		//Exit loop when herd is found
-		if (look() == Preserve::Feature::kHerd)
-		{
-			foundHerd = true;
-		}
+		// Exit loop when herd is found
+		if (look() == Preserve::Feature::kHerd) foundHerd = true;
 
-		//Listen and turn towrard the herd
+		// Listen and turn towrard the herd
 		auto const herdHeading = GPS::cardinal(listen());
-		while (herdHeading != getHeading(Turn::kForward))
-		{
-			turn(Turn::kRight);
-		}
-
-		//Check for brush in front of elephant
-		if (look(Turn::kForward) == Preserve::Feature::kBrush)
-		{
-			eat();
-		}
+		while (herdHeading != getHeading(Turn::kForward)) turn(Turn::kRight);
+			
+		// Check for brush in front of elephant
+		if (look(Turn::kForward) == Preserve::Feature::kBrush) eat();
 	
-		//Look at what elephant is standing on
-		if (look() == Preserve::Feature::kGrass)
-		{
-			eat();
-		}
-		else if (look() == Preserve::Feature::kWater)
-		{
-			drink();
-		}
+		// Look at what elephant is standing on
+		if (look() == Preserve::Feature::kGrass) eat();
+			
+		else if (look() == Preserve::Feature::kWater) drink();
 
-		//Sleep if tired, and not in water (no killing elephant)
-		if (isSleepy() && look() != Preserve::Feature::kWater)  
-		{
-			sleep();
-		}
-
-		//Maneuver around obstacles
+		// Sleep if tired, and not in water (no killing elephant)
+		if (isSleepy() && look() != Preserve::Feature::kWater) sleep();
+			
+		// Maneuver around obstacles
 		while (!canMove(look(Turn::kForward)))
 		{
 			if (canMove(look(Turn::kRight)))
@@ -92,7 +74,6 @@ void Elephant::findHerd()
 					turn(Turn::kRight);
 				}
 			}
-			//If there is obstacle to Right
 			else if (canMove(look(Turn::kLeft)))
 			{
 				turn(Turn::kLeft);
@@ -101,7 +82,6 @@ void Elephant::findHerd()
 				turn(Turn::kRight);
 			}
 		}
-
 		move(); 
 	}
 }

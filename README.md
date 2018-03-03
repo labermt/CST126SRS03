@@ -6,10 +6,13 @@ Class ID: Tangela and Persian
 
 SRS ID: CST126SRS03
 
-Unresolved Issues: Obstacle avoidance is... less than optimal. The elephant can and will get stuck under certain circumstances.
+Unresolved Issues: 
+
+Obstacle avoidance is... less than optimal. The elephant can and will get stuck under certain circumstances.
 
 Notes: 
 
+Elephant does not go out of its way to find food / water. It eats and drinks as it runs into food / water.
 
 ---
 
