@@ -2,14 +2,9 @@
 #include "elephant.h"
 #include <cassert>
 
-// Methods to implement in heirarchal order: isStuck(), eleTracks()
+// Methods to implement in heirarchal order: isStuck()
+
 bool movable(Preserve::Feature const terrain);
- /* void elephantTracks()
-{
-
-
-
-} */
 
 /* void isStuck()
  {
@@ -186,9 +181,9 @@ void Elephant::isStuck()
 
 		auto resolve = 0;
 
-		if (!movable(look(Turn::kForward)))//check for initial obstacle
+		if (!movable(look(Turn::kForward)))//confirms initial obstacle
 		{
-			resolve = 1;
+			resolve = 1; //moves to resolve case wall
 		}
 		while (stuck)
 		{
@@ -196,33 +191,57 @@ void Elephant::isStuck()
 			{
 			case wall:
 			{
-				if (!movable(look(Turn::kLeft)))
+				if (!movable(look(Turn::kLeft)) || !movable(look(Turn::kRight)))
 				{
-					resolve = 2;
+					resolve = 2; //might be a diagonal, moves to diagonal case
 					break;
 				}
-				else
+				else //is a wall
 				{
-					//is a wall
+					turn(Turn::kLeft);
+					move();
+
+					auto unresolved = true;
+
+					while (unresolved) //loop to follow wall until reaching an opening
+					{
+						if (!movable(look(Turn::kRight)))
+						{
+							move();
+						}
+						else
+						{
+							turn(Turn::kRight);
+							move();
+							unresolved = false;
+						}
+					}
+					break;
 				}
 			}
 			case diagonal:
 			{
-				if (!movable(look(Turn::kLeft)) || !movable(look(Turn::kRight)))
+				if (!movable(look(Turn::kLeft)) && !movable(look(Turn::kRight)))
 				{
-					resolve = 3;
+					resolve = 3; //not just a diagonal, moves to hall case
 					break;
 				}
-				else
+				else //is a diagonal
 				{
-					//is a diagonal
+					
+					break;
 				}
 			}
 			case hall:
 			{
-				turn(Turn::kLeft);
+				turn(Turn::kLeft); // turns around moves out of end of hall 
 				turn(Turn::kLeft);
 				move();
+
+				if (!movable(look(Turn::kLeft))) //check for continuous hall
+				{
+					
+				}
 			}
 			default:
 			{
