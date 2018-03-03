@@ -12,7 +12,6 @@ void Elephant::findHerd()
 
 	while (!herdfound)
 	{
-		//listen for the heard 
 		int hortonHearsaWho = listen();
 
 		switch (hortonHearsaWho)
@@ -89,7 +88,6 @@ void Elephant::findHerd()
 			break;
 		}
 
-
 		switch (toHortonsRight)
 		{
 		case Preserve::Feature::kUnknown:
@@ -116,16 +114,5 @@ void Elephant::findHerd()
 			findHerd();
 			break;
 		}
-
-
-
 	}
 }
-
-
-
-
-
-		
-	
-
