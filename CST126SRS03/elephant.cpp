@@ -3,7 +3,7 @@
 #include <cassert>
 
 // Methods to implement in heirarchal order: isStuck(), eleTracks()
-
+bool movable(Preserve::Feature const terrain);
  /* void elephantTracks()
 {
 
@@ -13,19 +13,19 @@
 
 /* void isStuck()
  {
-
+	
 //check for first stuck instance (wall)
 
 		loop, follow wall and look while following wall until movable terrain is found then move into that coordinate
 
-//check for second stuck instance (U)
+//check for second stuck instance (hallway)
 
 		check by looking in all directions til movable is found, then turn til heading movable terrain, then move out and around the U
 
 //check for third stuck instance (diagonal wall)
 
 		loop, follow wall and look while following wall until movable terrain is found then move into that coordinate
-
+		
  } */
 
 bool movable(Preserve::Feature const terrain)
@@ -117,7 +117,7 @@ void Elephant::findHerd()
 				{
 					move();
 				}
-				else //Herd is behind Elephant 
+				else //Herd is behind Elephant and or if there is an immovable obj
 				{
 					//assert(false);
 
@@ -173,6 +173,64 @@ void Elephant::findHerd()
 			found_heard = true;
 		}
 
+	}
+}
+
+void Elephant::isStuck()
+{
+	auto stuck = true;
+
+	while (stuck)
+	{
+		enum obstacle { none, wall, diagonal, hall };
+
+		auto resolve = 0;
+
+		if (!movable(look(Turn::kForward)))//check for initial obstacle
+		{
+			resolve = 1;
+		}
+		while (stuck)
+		{
+			switch (resolve)
+			{
+			case wall:
+			{
+				if (!movable(look(Turn::kLeft)))
+				{
+					resolve = 2;
+					break;
+				}
+				else
+				{
+					//is a wall
+				}
+			}
+			case diagonal:
+			{
+				if (!movable(look(Turn::kLeft)) || !movable(look(Turn::kRight)))
+				{
+					resolve = 3;
+					break;
+				}
+				else
+				{
+					//is a diagonal
+				}
+			}
+			case hall:
+			{
+				turn(Turn::kLeft);
+				turn(Turn::kLeft);
+				move();
+			}
+			default:
+			{
+				stuck = false;
+				break;
+			}
+			}
+		}
 	}
 }
 
