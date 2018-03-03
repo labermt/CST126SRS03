@@ -65,6 +65,8 @@ void Elephant::findHerd()
 			eat();
 		}
 
+		//add sleep();
+
 		auto const herd_dir = listen();
 		auto const heading = getHeading(Turn::kForward);
 		
@@ -152,7 +154,7 @@ void Elephant::isStuck()
 
 		if (!movable(look(Turn::kForward)))//confirms initial obstacle
 		{
-			resolve = 1; //moves to resolve case wall
+			resolve = wall; //moves to resolve case wall
 		}
 		while (stuck)
 		{
@@ -162,7 +164,7 @@ void Elephant::isStuck()
 			{
 				if (!movable(look(Turn::kLeft)) || !movable(look(Turn::kRight)))
 				{
-					resolve = 2; //might be a diagonal, moves to diagonal case
+					resolve = diagonal; //might be a diagonal, moves to diagonal case
 					break;
 				}
 				else //is a wall
@@ -192,7 +194,10 @@ void Elephant::isStuck()
 			{
 				if (!movable(look(Turn::kLeft)) && !movable(look(Turn::kRight)))
 				{
-					assert(false); //not just a diagonal, moves to hall case
+					assert(false); //hall case not written yet
+
+					//resolve = hall; //not just a diagonal, moves to hall case
+
 					break;
 				}
 				else //is a diagonal
@@ -204,8 +209,7 @@ void Elephant::isStuck()
 
 						if(!movable(look(Turn::kLeft)))
 						{
-							turn(Turn::kRight);
-							move();
+							resolve = wall;
 						}
 						else
 						{
@@ -220,7 +224,7 @@ void Elephant::isStuck()
 
 						if (!movable(look(Turn::kRight)))
 						{
-							turn(Turn::kLeft);
+							turn(Turn::kLeft);//wait fix this
 							move();
 						}
 						else
