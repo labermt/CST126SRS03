@@ -2,12 +2,7 @@
 #include "gps.h"
 #include "preserve.h"
 #include "elephant.h"
-#include <iostream>
-
-using std::cout;
-using std::endl;
-
-// *************** For diagnostics only - to be removed ***************
+#include <cassert>
 
 struct Brain
 {
@@ -78,6 +73,7 @@ char* getStringDirection(int direction)
 	case 90: return directionEast;
 	case 180: return directionSouth;
 	case 270: return directionWest;
+	default: break;
 	}
 	return nullptr;
 }
@@ -92,6 +88,7 @@ char* getStringFeature(Preserve::Feature feature)
 	case Preserve::Feature::kBrush: return featureBrush;
 	case Preserve::Feature::kGrass: return featureGrass;
 	case Preserve::Feature::kWater: return featureWater;
+	default: break;
 	}
 	return nullptr;
 }
@@ -109,6 +106,8 @@ void determineObstacles(Brain& memory)
 	case Preserve::Feature::kBrush:
 		memory.obstacleInFrontOfMe = true;
 		break;
+	default:
+		break;
 	}
 
 	switch (memory.featureRightOfMe)
@@ -116,6 +115,8 @@ void determineObstacles(Brain& memory)
 	case Preserve::Feature::kRock:
 	case Preserve::Feature::kBrush:
 		memory.obstacleRightOfMe = true;
+		break;
+	default:
 		break;
 	}
 
@@ -125,6 +126,8 @@ void determineObstacles(Brain& memory)
 	case Preserve::Feature::kBrush:
 		memory.obstacleLeftOfMe = true;
 		break;
+	default:
+		break;
 	}
 
 	switch (memory.featureBehindMe)
@@ -132,6 +135,8 @@ void determineObstacles(Brain& memory)
 	case Preserve::Feature::kRock:
 	case Preserve::Feature::kBrush:
 		memory.obstacleBehindMe = true;
+		break;
+	default:
 		break;
 	}
 }
@@ -156,7 +161,6 @@ bool isGrassNearMe(Brain& memory)
 		memory.featureRightOfMe == Preserve::Feature::kGrass ||
 		memory.featureLeftOfMe == Preserve::Feature::kGrass;
 }
-// *************** For diagnostics only - to be removed *************** end
 
 void Elephant::tag(GPS& gps)
 {
@@ -287,13 +291,12 @@ void Elephant::findHerd()
 				// Obstacle in the way
 				if (memory.directionOfHerd != memory.lastDirectionOfHerd)
 				{
-					if (determineIfCanMoveInTheDirectionWeWantTo(memory.lastDirectionOfHerd, memory, directionToHead))
-					{
-					}
-					else if (!determineIfCanMoveInTheDirectionWeWantTo(memory.secondToLastDirectionOfHerd, memory, directionToHead))
+					if (!determineIfCanMoveInTheDirectionWeWantTo(memory.secondToLastDirectionOfHerd, memory, directionToHead))
 					{
 						moveInDirectionWeCan = true;
 					}
+					// else (determineIfCanMoveInTheDirectionWeWantTo(memory.lastDirectionOfHerd, memory, directionToHead))
+					// { does nothing}
 				}
 				else
 				{
@@ -320,23 +323,25 @@ void Elephant::findHerd()
 				if (!directionFound)
 				{
 					// do something to handle blockade
+					assert(false);
 				}
 			}
 
-			if (directionToHead.keepHeadingForward) {}
 			if (directionToHead.turnLeft)
 			{
 				turn(Turn::kLeft);
 			}
-			if (directionToHead.turnRight)
+			else if (directionToHead.turnRight)
 			{
 				turn(Turn::kRight);
 			}
-			if (directionToHead.uTurn)
+			else if (directionToHead.uTurn)
 			{
 				turn(Turn::kLeft);
 				turn(Turn::kLeft);
 			}
+			// else (directionToHead.keepHeadingForward) {does nothing}
+
 			memory.currentDirection = Elephant::getHeading(Elephant::Turn::kForward);
 
 			move();
@@ -373,6 +378,8 @@ bool determineIfCanMoveInTheDirectionWeWantTo(int directionWeWantToHead, Brain &
 		case kEast:
 			directionToHead.turnRight = true;
 			return !memory.obstacleRightOfMe;
+		default:
+			break;
 		}
 		break;
 
@@ -391,6 +398,8 @@ bool determineIfCanMoveInTheDirectionWeWantTo(int directionWeWantToHead, Brain &
 		case kEast:
 			directionToHead.uTurn = true;
 			return !memory.obstacleBehindMe;
+		default:
+			break;
 		}
 		break;
 
@@ -409,6 +418,8 @@ bool determineIfCanMoveInTheDirectionWeWantTo(int directionWeWantToHead, Brain &
 		case kEast:
 			directionToHead.turnRight = true;
 			return !memory.obstacleRightOfMe;
+		default:
+			break;
 		}
 		break;
 
@@ -427,7 +438,10 @@ bool determineIfCanMoveInTheDirectionWeWantTo(int directionWeWantToHead, Brain &
 		case kEast:
 			directionToHead.keepHeadingForward = true;
 			return !memory.obstacleInFrontOfMe;
+		default:
+			break;
 		}
+	default:
 		break;
 	}
 	return false;
@@ -439,7 +453,7 @@ Preserve::Feature lookBehindMe(GPS* gps, Direction heading)
 
 	if (gps != nullptr)
 	{
-		auto distance{ 1 };
+		const auto distance{ 1 };
 
 		auto gpsLocation = *gps;
 		const auto delta{ GPS::cardinal(heading - 180) };

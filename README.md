@@ -2,7 +2,7 @@
 Elephant
 
 
-Class ID: Spheal
+Class ID: Spheal, Spearow
 
 SRS ID: CST126SRS03
 
