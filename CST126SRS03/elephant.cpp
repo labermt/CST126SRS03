@@ -44,27 +44,6 @@ void Elephant::findHerd()
 		{
 			drink();
 		}
-		/*if (getWater() <= 20)
-		{
-			if (lookLeft == Preserve::Feature::kWater)
-			{
-				turn(Turn::kLeft);
-				move();
-				drink();
-			}
-			if (lookRight == Preserve::Feature::kWater)
-			{
-				turn(Turn::kRight);
-				move();
-				drink();
-			}
-			if (lookForward == Preserve::Feature::kWater)
-			{
-				turn(Turn::kForward);
-				move();
-				drink();
-			}
-		}*/
 		if (getAwake() > 15 * 60)
 		{
 			sleep();
@@ -82,8 +61,8 @@ void Elephant::findHerd()
 		auto lookLeft = look(Turn::kLeft);
 		auto leftClear = lookLeft == Preserve::Feature::kGrass || lookLeft == Preserve::Feature::kDirt || lookLeft == Preserve::Feature::kWater || lookLeft == Preserve::Feature::kHerd;
 
-		const auto directionDifference = getHeading(Turn::kForward) - focusDirection;
-		switch ((directionDifference + 360) % 360)
+		const auto directionDelta = getHeading(Turn::kForward) - focusDirection;
+		switch ((directionDelta + 360) % 360)
 		{
 		case 0:
 			if (!forwardClear)
@@ -103,6 +82,7 @@ void Elephant::findHerd()
 				}
 			}
 			break;
+
 		case 90:
 			if (leftClear)
 			{
@@ -124,6 +104,7 @@ void Elephant::findHerd()
 				}
 			}
 			break;
+
 		case 180:
 			turn(Turn::kRight);
 			turn(Turn::kRight);
@@ -144,6 +125,7 @@ void Elephant::findHerd()
 				}
 			}
 			break;
+
 		case 270:
 			if (rightClear)
 			{
@@ -165,6 +147,7 @@ void Elephant::findHerd()
 				}
 			}
 			break;
+
 		default:
 			assert(false);
 			break;
