@@ -56,6 +56,7 @@ protected: // Student available methods.
 	bool isHungry() const;
 
 	Direction getHeading(const Turn turn) const;
+	Direction getHeading() const;
 	Preserve::Feature look() const;
 	Preserve::Feature look(const Turn turn) const;
 	int listen() const; // Elephants can feel vibrations with their feet. 
