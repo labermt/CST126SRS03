@@ -27,7 +27,7 @@ void Elephant::findHerd()
 			}
 			else
 			{
-				auto possibleDirections = { Turn::kLeft, Turn::kForward, Turn::kRight };
+				const auto possibleDirections = { Turn::kLeft, Turn::kForward, Turn::kRight };
 				for (auto direction : possibleDirections)
 				{
 					if (look(direction) == Preserve::Feature::kBrush)
@@ -36,7 +36,6 @@ void Elephant::findHerd()
 						eat();
 						eat();
 						eat();
-						
 					}
 				}
 			}
@@ -167,6 +166,7 @@ void Elephant::findHerd()
 			}
 			break;
 		default:
+			assert(false);
 			break;
 		}
 		move();
