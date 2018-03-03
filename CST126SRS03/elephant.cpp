@@ -1,6 +1,4 @@
 #include "stdafx.h"
-#include "gps.h"
-#include "preserve.h"
 #include "elephant.h"
 #include <cassert>
 
@@ -17,12 +15,6 @@ struct Brain
 	Preserve::Feature featureLeftOfMe;
 	Preserve::Feature featureRightOfMe;
 	Preserve::Feature featureBehindMe;
-
-	bool isHungry;
-	bool isThirsty;
-	bool isSleepy;
-	unsigned water;
-	unsigned weight;
 
 	bool waterNearMe;
 	bool brushNearMe;
@@ -42,125 +34,12 @@ struct DirectionToHead
 	bool uTurn;
 };
 
-char* getStringDirection(int direction);
-char* getStringFeature(Preserve::Feature feature);
 void determineObstacles(Brain& memory);
 bool determineIfCanMoveInTheDirectionWeWantTo(int directionWeWantToHead, Brain &memory, DirectionToHead &directionToHead);
 Preserve::Feature lookBehindMe(GPS* gps, Direction heading);
 bool isWaterNearMe(Brain& memory);
 bool isBrushNearMe(Brain& memory);
 bool isGrassNearMe(Brain& memory);
-
-char directionNorth[] = "North";
-char directionEast[] = "East";
-char directionWest[] = "West";
-char directionSouth[] = "South";
-char directionNotSet[] = "not set";
-
-char featureHerd[] = "Herd";
-char featureDirt[] = "Dirt";
-char featureRock[] = "Rock";
-char featureBrush[] = "Brush";
-char featureGrass[] = "Grass";
-char featureWater[] = "Water";
-
-char* getStringDirection(int direction)
-{
-	switch (direction)
-	{
-	case -1: return directionNotSet;
-	case 0: return directionNorth;
-	case 90: return directionEast;
-	case 180: return directionSouth;
-	case 270: return directionWest;
-	default: break;
-	}
-	return nullptr;
-}
-
-char* getStringFeature(Preserve::Feature feature)
-{
-	switch (feature)
-	{
-	case Preserve::Feature::kHerd: return featureHerd;
-	case Preserve::Feature::kDirt: return featureDirt;
-	case Preserve::Feature::kRock: return featureRock;
-	case Preserve::Feature::kBrush: return featureBrush;
-	case Preserve::Feature::kGrass: return featureGrass;
-	case Preserve::Feature::kWater: return featureWater;
-	default: break;
-	}
-	return nullptr;
-}
-
-void determineObstacles(Brain& memory)
-{
-	memory.obstacleInFrontOfMe = false;
-	memory.obstacleRightOfMe = false;
-	memory.obstacleLeftOfMe = false;
-	memory.obstacleBehindMe = false;
-
-	switch (memory.featureInFrontOfMe)
-	{
-	case Preserve::Feature::kRock:
-	case Preserve::Feature::kBrush:
-		memory.obstacleInFrontOfMe = true;
-		break;
-	default:
-		break;
-	}
-
-	switch (memory.featureRightOfMe)
-	{
-	case Preserve::Feature::kRock:
-	case Preserve::Feature::kBrush:
-		memory.obstacleRightOfMe = true;
-		break;
-	default:
-		break;
-	}
-
-	switch (memory.featureLeftOfMe)
-	{
-	case Preserve::Feature::kRock:
-	case Preserve::Feature::kBrush:
-		memory.obstacleLeftOfMe = true;
-		break;
-	default:
-		break;
-	}
-
-	switch (memory.featureBehindMe)
-	{
-	case Preserve::Feature::kRock:
-	case Preserve::Feature::kBrush:
-		memory.obstacleBehindMe = true;
-		break;
-	default:
-		break;
-	}
-}
-
-bool isWaterNearMe(Brain& memory)
-{
-	return memory.featureInFrontOfMe == Preserve::Feature::kWater ||
-		memory.featureRightOfMe == Preserve::Feature::kWater ||
-		memory.featureLeftOfMe == Preserve::Feature::kWater;
-}
-
-bool isBrushNearMe(Brain& memory)
-{
-	return memory.featureInFrontOfMe == Preserve::Feature::kBrush ||
-		memory.featureRightOfMe == Preserve::Feature::kBrush ||
-		memory.featureLeftOfMe == Preserve::Feature::kBrush;
-}
-
-bool isGrassNearMe(Brain& memory)
-{
-	return memory.featureInFrontOfMe == Preserve::Feature::kGrass ||
-		memory.featureRightOfMe == Preserve::Feature::kGrass ||
-		memory.featureLeftOfMe == Preserve::Feature::kGrass;
-}
 
 void Elephant::tag(GPS& gps)
 {
@@ -171,9 +50,9 @@ void Elephant::findHerd()
 {
 	Brain memory;
 	DirectionToHead directionToHead;
-	bool firstTime = true;
+	auto firstTime = true;
 
-	const int maxWater = 200;
+	const auto maxWater = 200;
 
 	memory.currentDirection = getHeading(Turn::k0);
 
@@ -187,13 +66,10 @@ void Elephant::findHerd()
 			memory.lastDirectionOfHerd = memory.directionOfHerd;
 			firstTime = false;
 		}
-		else
+		else if (memory.directionOfHerd != memory.lastDirectionOfHerd)
 		{
-			if (memory.directionOfHerd != memory.lastDirectionOfHerd)
-			{
-				memory.secondToLastDirectionOfHerd = memory.lastDirectionOfHerd;
-				memory.lastDirectionOfHerd = memory.directionOfHerd;
-			}
+			memory.secondToLastDirectionOfHerd = memory.lastDirectionOfHerd;
+			memory.lastDirectionOfHerd = memory.directionOfHerd;
 		}
 
 		// look around
@@ -202,13 +78,6 @@ void Elephant::findHerd()
 		memory.featureLeftOfMe = look(Turn::kLeft);
 		memory.featureRightOfMe = look(Turn::kRight);
 		memory.featureBehindMe = lookBehindMe(getGps_(), memory.currentDirection);
-
-		memory.isHungry = isHungry();
-		memory.isThirsty = isThirsty();
-		memory.isSleepy = isSleepy();
-
-		memory.water = getWater();
-		memory.weight = getWeight();
 
 		memory.waterNearMe = isWaterNearMe(memory);
 		memory.brushNearMe = isBrushNearMe(memory);
@@ -282,9 +151,9 @@ void Elephant::findHerd()
 		// ******* Move Processing *******
 		if (moveTowardHerd)
 		{
-			bool moveInDirectionWeCan = false;
+			auto moveInDirectionWeCan = false;
 
-			int directionOfHerd = memory.directionOfHerd;
+			const auto directionOfHerd = memory.directionOfHerd;
 
 			if (!determineIfCanMoveInTheDirectionWeWantTo(directionOfHerd, memory, directionToHead))
 			{
@@ -309,9 +178,9 @@ void Elephant::findHerd()
 
 			if (moveInDirectionWeCan)
 			{
-				bool directionFound = false;
+				auto directionFound = false;
 
-				for (int directionToTry = 0; directionToTry <= 270; directionToTry += 90)
+				for (auto directionToTry = 0; directionToTry <= 270; directionToTry += 90)
 				{
 					if (determineIfCanMoveInTheDirectionWeWantTo(directionToTry, memory, directionToHead))
 					{
@@ -322,7 +191,7 @@ void Elephant::findHerd()
 
 				if (!directionFound)
 				{
-					// do something to handle blockade
+					// do something to handle error
 					assert(false);
 				}
 			}
@@ -340,7 +209,7 @@ void Elephant::findHerd()
 				turn(Turn::kLeft);
 				turn(Turn::kLeft);
 			}
-			// else (directionToHead.keepHeadingForward) {does nothing}
+			// else (directionToHead.keepHeadingForward) {does not turn}
 
 			memory.currentDirection = Elephant::getHeading(Elephant::Turn::kForward);
 
@@ -349,7 +218,55 @@ void Elephant::findHerd()
 	} while (true);
 }
 
-bool determineIfCanMoveInTheDirectionWeWantTo(int directionWeWantToHead, Brain &memory, DirectionToHead &directionToHead)
+void determineObstacles(Brain& memory)
+{
+	memory.obstacleInFrontOfMe = false;
+	memory.obstacleRightOfMe = false;
+	memory.obstacleLeftOfMe = false;
+	memory.obstacleBehindMe = false;
+
+	switch (memory.featureInFrontOfMe)
+	{
+	case Preserve::Feature::kRock:
+	case Preserve::Feature::kBrush:
+		memory.obstacleInFrontOfMe = true;
+		break;
+	default:
+		break;
+	}
+
+	switch (memory.featureRightOfMe)
+	{
+	case Preserve::Feature::kRock:
+	case Preserve::Feature::kBrush:
+		memory.obstacleRightOfMe = true;
+		break;
+	default:
+		break;
+	}
+
+	switch (memory.featureLeftOfMe)
+	{
+	case Preserve::Feature::kRock:
+	case Preserve::Feature::kBrush:
+		memory.obstacleLeftOfMe = true;
+		break;
+	default:
+		break;
+	}
+
+	switch (memory.featureBehindMe)
+	{
+	case Preserve::Feature::kRock:
+	case Preserve::Feature::kBrush:
+		memory.obstacleBehindMe = true;
+		break;
+	default:
+		break;
+	}
+}
+
+bool determineIfCanMoveInTheDirectionWeWantTo(const int directionWeWantToHead, Brain &memory, DirectionToHead &directionToHead)
 {
 	if (directionWeWantToHead == -1)
 	{
@@ -444,10 +361,11 @@ bool determineIfCanMoveInTheDirectionWeWantTo(int directionWeWantToHead, Brain &
 	default:
 		break;
 	}
+	
 	return false;
 }
 
-Preserve::Feature lookBehindMe(GPS* gps, Direction heading)
+Preserve::Feature lookBehindMe(GPS* gps, const Direction heading)
 {
 	auto result{ Preserve::Feature::kUnknown };
 
@@ -456,10 +374,34 @@ Preserve::Feature lookBehindMe(GPS* gps, Direction heading)
 		const auto distance{ 1 };
 
 		auto gpsLocation = *gps;
+		
 		const auto delta{ GPS::cardinal(heading - 180) };
+		
 		gpsLocation.move(heading + delta, distance);
+		
 		result = Preserve::getInstance().getFeature(gpsLocation);
 	}
 
 	return result;
+}
+
+bool isWaterNearMe(Brain& memory)
+{
+	return memory.featureInFrontOfMe == Preserve::Feature::kWater ||
+		memory.featureRightOfMe == Preserve::Feature::kWater ||
+		memory.featureLeftOfMe == Preserve::Feature::kWater;
+}
+
+bool isBrushNearMe(Brain& memory)
+{
+	return memory.featureInFrontOfMe == Preserve::Feature::kBrush ||
+		memory.featureRightOfMe == Preserve::Feature::kBrush ||
+		memory.featureLeftOfMe == Preserve::Feature::kBrush;
+}
+
+bool isGrassNearMe(Brain& memory)
+{
+	return memory.featureInFrontOfMe == Preserve::Feature::kGrass ||
+		memory.featureRightOfMe == Preserve::Feature::kGrass ||
+		memory.featureLeftOfMe == Preserve::Feature::kGrass;
 }
