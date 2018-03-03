@@ -14,5 +14,5 @@ public:
 public: // Student to implement methods: 
 	void tag(GPS& gps);
 	void findHerd();
-	bool canWalkOn(Preserve::Feature direction);
+	bool canWalkOn(const Preserve::Feature direction) const;
 };

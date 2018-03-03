@@ -168,7 +168,7 @@ void Elephant::findHerd()
 	}
 }
 
-bool Elephant::canWalkOn(Preserve::Feature feature)
+bool Elephant::canWalkOn(const Preserve::Feature feature) const
 {
 	bool result = feature == Preserve::Feature::kGrass || feature == Preserve::Feature::kDirt || feature == Preserve::Feature::kWater || feature == Preserve::Feature::kHerd;
 	return result;
