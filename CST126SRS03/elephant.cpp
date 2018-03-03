@@ -16,97 +16,38 @@ void Elephant::findHerd()
 		if (look() == Preserve::Feature::kGrass && getWeight() < 6010)
 			eat();
 
-		if (look() == Preserve::Feature::kWater && getWater() == 0)
+		if (look() == Preserve::Feature::kWater && getWater() <= 20)
 			drink();
 
-		if (look() != Preserve::Feature::kWater && getAwake() >= 22)
+		if (look() != Preserve::Feature::kWater && isSleepy())
 			sleep();
 
 		auto destination = Loxodonta::listen();
+		faceHerd();
 
-		if (destination == 0)
+		auto lookingAt = look(Turn::kForward);
+		if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
 		{
-			auto lookingAt = look(Turn::kForward);
-			if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
-			{
-				if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
-				{
-					while (lookingAt == Preserve::Feature::kBrush && getWeight() < 5900)
-						eat();
-					dodgeObstacle(Loxodonta::Turn::kRight);
-				}
-			}
-			else
-				Loxodonta::move();
-		}
-		else if (destination == 90)
-		{
-			auto lookingAt = look(Turn::kRight);
-			if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
-			{
-				while (lookingAt == Preserve::Feature::kBrush && getWeight() < 6090)
-				{ 
-					Turn(kRight);
-					eat();
-					Turn(kLeft);
-				}
-				dodgeObstacle(Loxodonta::Turn::kRight);
-			}
-			else
-			{
-				turn(Turn::kRight);
-				Loxodonta::move();
-			}
-				
-		}
-		else if (destination == 270)
-		{
-			auto lookingAt = look(Turn::kLeft);
-			if (lookingAt == Preserve::Feature::kRock || lookingAt == Preserve::Feature::kBrush)
-			{
-				while (lookingAt == Preserve::Feature::kBrush && getWeight() < 6090)
-				{
-					Turn(kLeft);
-					eat();
-					Turn(kRight);
-				}
-				dodgeObstacle(Loxodonta::Turn::kLeft);
-			}
-			else
-			{
-				turn(Turn::kLeft);
-			}
-				
+			//while (lookingAt == Preserve::Feature::kBrush && getWeight() < 5900)
+			//	eat();
+			dodgeObstacle();
 		}
 		else
-		{
-			turn(Turn::kLeft);
-		}
-		Loxodonta::move();
+			Loxodonta::move();
 	}
 }
 
-void Elephant::dodgeObstacle(Loxodonta::Turn heading)
+void Elephant::dodgeObstacle()
 {
-	switch (heading) 
-	{
-		case Loxodonta::Turn::kForward : 
-			turn(Loxodonta::Turn::kLeft);
-		case Loxodonta::Turn::kRight : 
-			Loxodonta::move();
-			while (Loxodonta::look(Loxodonta::Turn::kRight) != Preserve::Feature::kRock || Elephant::Loxodonta::look(Loxodonta::Turn::kRight) != Preserve::Feature::kBrush)
-				Loxodonta::move();
-			turn(Loxodonta::Turn::kRight);
-			Loxodonta::move();
-			break;
-		case Loxodonta::Turn::kLeft : Elephant::move();
-			turn(Loxodonta::Turn::kLeft);
-			while (look(Loxodonta::Turn::kLeft) != Preserve::Feature::kRock || look(Loxodonta::Turn::kLeft) != Preserve::Feature::kBrush)
-				Loxodonta::move();
-			turn(Loxodonta::Turn::kLeft);
-			Loxodonta::move();
-			break;
-	}
+	turn(Turn::kLeft);
+	if (look(Turn::kForward) == Preserve::Feature::kRock || look(Turn::kForward) == Preserve::Feature::kBrush)
+		turn(Turn::kLeft);
+	Loxodonta::move();
+	while (look(Turn::kRight) == Preserve::Feature::kRock || look(Turn::kRight) == Preserve::Feature::kBrush)
+		Loxodonta::move();
+	turn(Turn::kRight);
+	Loxodonta::move();
+
 	return;
 }
 

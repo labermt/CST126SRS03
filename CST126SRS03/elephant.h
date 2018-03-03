@@ -14,5 +14,5 @@ public:
 public: // Student to implement methods: 
 	void tag(GPS& gps);
 	void findHerd();
-	void dodgeObstacle(Loxodonta::Turn heading);
+	void dodgeObstacle();
 };
