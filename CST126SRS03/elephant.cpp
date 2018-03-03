@@ -11,12 +11,12 @@ void Elephant::tag(GPS& gps)
 
 void Elephant::findHerd()
 {
-	auto feature = look();
+	auto feature{ look() };
 	while (feature != Preserve::Feature::kHerd)
 	{
 		if (feature == Preserve::Feature::kUnknown)
 		{
-			assert(false); // Let Mitch know
+			assert(false);
 		}
 
 		if (getWeight() - getMinWeight() < 80)
@@ -44,115 +44,132 @@ void Elephant::findHerd()
 		{
 			drink();
 		}
-		if (getAwake() > 15 * 60)
+		constexpr auto sleepThreshhold{ 15 * 60 };
+		if (getAwake() > sleepThreshhold)
 		{
 			sleep();
 		}
 
-		const auto focusDirection = listen();
-		const auto heading = getHeading(Turn::kForward);
+		const auto focusDirection{ listen() };
+		const auto heading{ getHeading(Turn::kForward) };
 
-		const auto lookForward = look(Turn::kForward);
-		const auto forwardClear = lookForward == Preserve::Feature::kGrass || lookForward == Preserve::Feature::kDirt || lookForward == Preserve::Feature::kWater || lookForward == Preserve::Feature::kHerd;
+		const auto lookForward{ look(Turn::kForward) };
+		const auto forwardClear{ canWalkOn(lookForward) };
 
-		auto lookRight = look(Turn::kRight);
-		auto rightClear = lookRight == Preserve::Feature::kGrass || lookRight == Preserve::Feature::kDirt || lookRight == Preserve::Feature::kWater || lookRight == Preserve::Feature::kHerd;
+		auto lookRight{ look(Turn::kRight) };
+		auto rightClear{ canWalkOn(lookRight) };
 
-		auto lookLeft = look(Turn::kLeft);
-		auto leftClear = lookLeft == Preserve::Feature::kGrass || lookLeft == Preserve::Feature::kDirt || lookLeft == Preserve::Feature::kWater || lookLeft == Preserve::Feature::kHerd;
+		auto lookLeft{ look(Turn::kLeft) };
+		auto leftClear{ canWalkOn(lookLeft) };
 
-		const auto directionDelta = getHeading(Turn::kForward) - focusDirection;
+		const auto directionDelta{ getHeading(Turn::kForward) - focusDirection };
 		switch ((directionDelta + 360) % 360)
 		{
-		case 0:
-			if (!forwardClear)
+			case 0:
 			{
-				if (rightClear)
+				if (!forwardClear)
 				{
-					turn(Turn::kRight);
-				}
-				else if (leftClear)
-				{
-					turn(Turn::kLeft);
-				}
-				else
-				{
-					turn(Turn::kRight);
-					turn(Turn::kRight);
+					if (rightClear)
+					{
+						turn(Turn::kRight);
+					}
+					else if (leftClear)
+					{
+						turn(Turn::kLeft);
+					}
+					else
+					{
+						turn(Turn::kRight);
+						turn(Turn::kRight);
+					}
 				}
 			}
 			break;
 
-		case 90:
-			if (leftClear)
+			case 90:
 			{
-				turn(Turn::kLeft);
-			}
-			else if (!forwardClear)
-			{
-				turn(Turn::kLeft);
-				lookLeft = look(Turn::kLeft);
-				leftClear = lookLeft == Preserve::Feature::kGrass || lookLeft == Preserve::Feature::kDirt || lookLeft == Preserve::Feature::kWater || lookLeft == Preserve::Feature::kHerd;
 				if (leftClear)
 				{
 					turn(Turn::kLeft);
 				}
-				else
-				{
-					turn(Turn::kRight);
-					turn(Turn::kRight);
-				}
-			}
-			break;
-
-		case 180:
-			turn(Turn::kRight);
-			turn(Turn::kRight);
-			if (!forwardClear)
-			{
-				if (rightClear)
-				{
-					turn(Turn::kRight);
-				}
-				else if (leftClear)
+				else if (!forwardClear)
 				{
 					turn(Turn::kLeft);
-				}
-				else
-				{
-					turn(Turn::kRight);
-					turn(Turn::kRight);
+					lookLeft = look(Turn::kLeft);
+					leftClear = canWalkOn(lookLeft);
+					if (leftClear)
+					{
+						turn(Turn::kLeft);
+					}
+					else
+					{
+						turn(Turn::kRight);
+						turn(Turn::kRight);
+					}
 				}
 			}
 			break;
 
-		case 270:
-			if (rightClear)
+			case 180:
 			{
 				turn(Turn::kRight);
+				turn(Turn::kRight);
+				if (!forwardClear)
+				{
+					if (rightClear)
+					{
+						turn(Turn::kRight);
+					}
+					else if (leftClear)
+					{
+						turn(Turn::kLeft);
+					}
+					else
+					{
+						turn(Turn::kRight);
+						turn(Turn::kRight);
+					}
+				}
 			}
-			else if (!forwardClear)
+			break;
+			
+			case 270:
 			{
-				turn(Turn::kRight);
-				lookRight = look(Turn::kRight);
-				rightClear = rightClear = lookRight == Preserve::Feature::kGrass || lookRight == Preserve::Feature::kDirt || lookRight == Preserve::Feature::kWater || lookRight == Preserve::Feature::kHerd;
 				if (rightClear)
 				{
 					turn(Turn::kRight);
 				}
-				else
+				else if (!forwardClear)
 				{
 					turn(Turn::kRight);
-					turn(Turn::kRight);
+					lookRight = look(Turn::kRight);
+					rightClear = canWalkOn(lookRight);
+					if (rightClear)
+					{
+						turn(Turn::kRight);
+					}
+					else
+					{
+						turn(Turn::kRight);
+						turn(Turn::kRight);
+					}
 				}
 			}
 			break;
-
-		default:
-			assert(false);
+			
+			default:
+			{
+				assert(false);
+			}
 			break;
 		}
 		move();
 		feature = look();
 	}
+}
+
+bool Elephant::canWalkOn(Preserve::Feature feature)
+{
+	bool result = feature == Preserve::Feature::kGrass || feature == Preserve::Feature::kDirt || feature == Preserve::Feature::kWater || feature == Preserve::Feature::kHerd;
+	return result;
 }
