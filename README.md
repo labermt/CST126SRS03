@@ -2,13 +2,15 @@
 Elephant
 
 
-Class ID: 
+Class ID: Spheal, Spearow
 
 SRS ID: CST126SRS03
 
 Unresolved Issues: 
 
 Notes: 
+I can't run this on Window 8, but I can run on Window 10.
+
 
 ---
 
