@@ -15,18 +15,26 @@ void Elephant::findHerd()
 		//listen for the heard 
 		int hortonHearsaWho = listen();
 
+		switch (hortonHearsaWho)
+		{
+		case (0):
+			turn(Turn::kForward);
+			break;
+		case (270):
+			turn(Turn::kLeft);
+			break;
+		case (90):
+			turn(Turn::kRight);
+			break;
+		}
+
+		
 		auto toHortonsLeft = look(Turn::kLeft);
 		auto toHortonsFront = look(Turn::kForward);
 		auto toHortonsRight = look(Turn::kRight);
 
 		//look based on 270,0, 90 and if there is no ob
-
-
 		
-		
-
-
-
 		if (toHortonsLeft != Preserve::Feature::kUnknown)
 		{
 			switch (toHortonsLeft)
@@ -37,7 +45,7 @@ void Elephant::findHerd()
 				herdfound = true;
 			case Preserve::Feature::kDirt:
 				move();
-				findHerd();
+				//findHerd();
 				break;
 			case Preserve::Feature::kRock:
 				break;
@@ -50,7 +58,6 @@ void Elephant::findHerd()
 			case Preserve::Feature::kWater:
 				move();
 				drink();
-				findHerd();
 				break;
 			}
 		}
@@ -109,6 +116,9 @@ void Elephant::findHerd()
 			findHerd();
 			break;
 		}
+
+
+
 	}
 }
 
