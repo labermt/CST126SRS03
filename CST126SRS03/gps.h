@@ -15,7 +15,7 @@ private:
 	int lat_{-1};
 	int lng_{-1};
 
-private:
+public:
 	static int rangeTheta(const int theta);
 
 public:
