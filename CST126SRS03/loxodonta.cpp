@@ -165,6 +165,12 @@ Direction Loxodonta::getHeading(const Turn turn) const
 	return result;
 }
 
+Direction Loxodonta::getHeading() const
+{
+	const auto result{ getHeading(Turn::kForward) };
+	return result;
+}
+
 Preserve::Feature Loxodonta::look(const Turn turn) const
 {
 	auto result{ Preserve::Feature::kUnknown };
