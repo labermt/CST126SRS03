@@ -11,7 +11,7 @@ public:
 	{
 	}
 
-public: // Student to implement methods: 
+public: // To be implemented methods. 
 	void tag(GPS& gps);
 	void findHerd();
 };
