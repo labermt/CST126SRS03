@@ -8,11 +8,14 @@ class GPS
 public:
 	enum Coordinate { kLng = 0, kLat = 1 };
 
-private:
-	int lat_{5};
-	int lng_{5};
+public:
+	GPS(const int lat, const int lng);
 
 private:
+	int lat_{-1};
+	int lng_{-1};
+
+public:
 	static int rangeTheta(const int theta);
 
 public:

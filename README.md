@@ -2,13 +2,13 @@
 Elephant
 
 
-Class ID: 
+Class ID: Inkay
 
 SRS ID: CST126SRS03
 
-Unresolved Issues: 
+Unresolved Issues: numeral syntax errors, cant run with these so i dont know if it even works.
 
-Notes: 
+Notes: Had a hard time getting the new changes you made with github. not sure if everything is how it should. there might be a problem then if there is.
 
 ---
 
