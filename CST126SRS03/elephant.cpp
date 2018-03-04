@@ -2,25 +2,6 @@
 #include "elephant.h"
 #include <cassert>
 
-// Methods to implement in heirarchal order: isStuck()
-
-/* void isStuck()
- {
-	
-//check for first stuck instance (wall)
-
-		loop, follow wall and look while following wall until movable terrain is found then move into that coordinate
-
-//check for second stuck instance (hallway)
-
-		check by looking in all directions til movable is found, then turn til heading movable terrain, then move out and around the U
-
-//check for third stuck instance (diagonal wall)
-
-		loop, follow wall and look while following wall until movable terrain is found then move into that coordinate
-		
- } */
-
 bool movable(Preserve::Feature const terrain)
 {
 	auto result = false;
@@ -65,7 +46,10 @@ void Elephant::findHerd()
 			eat();
 		}
 
-		//add sleep();
+		if(isSleepy()) //this should be all we need to make the elephant sleep when it has been awake too long
+		{
+			sleep();
+		}
 
 		auto const herd_dir = listen();
 		auto const heading = getHeading(Turn::kForward);
@@ -74,13 +58,13 @@ void Elephant::findHerd()
 		{
 			if (getHeading(Turn::kRight) == herd_dir)
 			{
-				if(movable(look(Turn::kRight)))
+				if (movable(look(Turn::kRight)))
 				{
 					turn(Turn::kRight);
 					move();
 				}
 				//can be replaced with isStuck() \/
-				else if(movable(look(Turn::kForward)))
+				/*else if(movable(look(Turn::kForward)))
 				{
 					move();
 				}
@@ -88,17 +72,22 @@ void Elephant::findHerd()
 				{
 					turn(Turn::kLeft);
 					move();
+				}*/
+				else
+				{
+					turn(Turn::kRight);
+					isStuck();
 				}
 			}
 			else if (getHeading(Turn::kLeft) == herd_dir)
 			{
-				if(movable(look(Turn::kLeft)))
+				if (movable(look(Turn::kLeft)))
 				{
 					turn(Turn::kLeft);
 					move();
 				}
 				//can be replaced with isStuck() \/
-				else if (movable(look(Turn::kForward)))
+				/*else if (movable(look(Turn::kForward)))
 				{
 					move();
 				}
@@ -106,6 +95,11 @@ void Elephant::findHerd()
 				{
 					turn(Turn::kRight);
 					move();
+				}*/
+				else
+				{
+					turn(Turn::kLeft);
+					isStuck();
 				}
 			}
 			else //Herd is not left or right
@@ -123,7 +117,7 @@ void Elephant::findHerd()
 				move();
 			}
 			//else isStuck() can replace this \/
-			else if(movable(look(Turn::kRight)))
+			/*else if(movable(look(Turn::kRight)))
 			{
 				turn(Turn::kRight);
 				move();
@@ -132,6 +126,10 @@ void Elephant::findHerd()
 			{
 				turn(Turn::kLeft);
 				move();
+			}*/
+			else
+			{
+				isStuck();
 			}
 		}
 		if (look() == Preserve::Feature::kHerd)
@@ -152,11 +150,27 @@ void Elephant::isStuck()
 
 		auto resolve = 0;
 
-		if (!movable(look(Turn::kForward)))//confirms initial obstacle
+		auto solving = false;
+
+		if (!movable(look(Turn::kForward))) //confirms initial obstacle and/or post solve obstacle
 		{
-			resolve = wall; //moves to resolve case wall
+			if (getHeading(Turn::kForward) != listen()) //checks that obstacle is actually blocking elephants path to the herd
+			{
+				stuck = false;
+			}
+			else
+			{
+				resolve = wall; //moves to resolve case wall
+
+				solving = stuck;
+			}
 		}
-		while (stuck)
+		else
+		{
+			stuck = false;
+		}
+
+		while (solving)
 		{
 			switch (resolve)
 			{
@@ -165,91 +179,250 @@ void Elephant::isStuck()
 				if (!movable(look(Turn::kLeft)) || !movable(look(Turn::kRight)))
 				{
 					resolve = diagonal; //might be a diagonal, moves to diagonal case
-					break;
 				}
 				else //is a wall
 				{
-					turn(Turn::kLeft);
-					move();
-
 					auto unresolved = true;
+
+					turn(Turn::kRight);
+					move();
 
 					while (unresolved) //loop to follow wall until reaching an opening
 					{
-						if (!movable(look(Turn::kRight)))
+						if (!movable(look(Turn::kLeft)) && movable(look(Turn::kForward))) //no opening in wall
 						{
 							move();
 						}
-						else
+						else if (!movable(look(Turn::kLeft)) && !movable(look(Turn::kForward))) //hit a corner
 						{
-							turn(Turn::kRight);
-							move();
+							resolve = diagonal;
 							unresolved = false;
 						}
+						else //opening in wall reached
+						{
+							turn(Turn::kLeft);
+							move();
+
+							if (movable(look(Turn::kForward)))
+							{
+								move();
+								unresolved = false;
+								solving = false;
+							}
+							else
+							{
+								resolve = diagonal;
+								unresolved = false;
+							}
+						}
 					}
-					break;
 				}
+				break;
 			}
 			case diagonal:
 			{
 				if (!movable(look(Turn::kLeft)) && !movable(look(Turn::kRight)))
 				{
-					assert(false); //hall case not written yet
-
-					//resolve = hall; //not just a diagonal, moves to hall case
-
-					break;
+					resolve = hall; //not just a diagonal, moves to hall case
 				}
 				else //is a diagonal
 				{
 					if (!movable(look(Turn::kLeft))) //can move right
 					{
-						turn(Turn::kRight);
-						move();
+						auto unresolved = true;
 
-						if(!movable(look(Turn::kLeft)))
+						while (unresolved)
 						{
-							resolve = wall;
-						}
-						else
-						{
-							turn(Turn::kLeft);
-							move();
+							if (!movable(look(Turn::kForward)) && movable(look(Turn::kRight)))
+							{
+								turn(Turn::kRight);
+								move();
+
+								if (!movable(look(Turn::kLeft))) //wall
+								{
+									turn(Turn::kLeft);
+									resolve = wall;
+									unresolved = false;
+								}
+								else
+								{
+									turn(Turn::kLeft);
+									move();
+								}
+							}
+							else
+							{
+								move();
+								unresolved = false;
+								solving = false;
+							}
 						}
 					}
 					else //can move left
 					{
-						turn(Turn::kLeft);
-						move();
+						auto unresolved = true;
 
-						if (!movable(look(Turn::kRight)))
+						while (unresolved)
 						{
-							turn(Turn::kLeft);//wait fix this
-							move();
-						}
-						else
-						{
-							turn(Turn::kRight);
-							move();
+							if (!movable(look(Turn::kForward)) && movable(look(Turn::kLeft)))
+							{
+								turn(Turn::kLeft);
+								move();
+
+								if (!movable(look(Turn::kRight))) //wall
+								{
+									turn(Turn::kRight);
+									resolve = wall;
+									unresolved = false;
+								}
+								else
+								{
+									turn(Turn::kRight);
+									move();
+								}
+							}
+							else
+							{
+								move();
+								unresolved = false;
+								solving = false;
+							}
 						}
 					}
 					break;
 				}
 			}
-			/*case hall:
+			case hall:
 			{
-				turn(Turn::kLeft); // turns around moves out of end of hall 
+				auto unresolved = true;
+
+				turn(Turn::kLeft); //turns around moves out of end of hall dead end
 				turn(Turn::kLeft);
 				move();
 
-				if (!movable(look(Turn::kLeft))) //check for continuous hall
+				while (unresolved)
 				{
-					
+					if (!movable(look(Turn::kLeft)) && !movable(look(Turn::kRight))) //continuous hall on both sides
+					{
+						if (!movable(look(Turn::kForward)))
+						{
+							assert(false); //This should NEVER occur. (If it does, somehow the elephant has clipped into an area it should not be in or it started out completely surrounded)
+						}
+						else
+						{
+							move();
+						}
+					}
+					else if (movable(look(Turn::kLeft))) //found opening in new left side of hall
+					{
+						turn(Turn::kLeft);
+						move();
+
+						if (!movable(look(Turn::kForward)))
+						{
+							if(!movable(look(Turn::kRight)))
+							{
+								turn(Turn::kLeft);
+								turn(Turn::kLeft);
+								move();
+
+								if (!movable(look(Turn::kForward)))
+								{
+									turn(Turn::kLeft);
+									move();
+								}
+								else
+								{
+									move();
+
+									if (!movable(look(Turn::kForward)))
+									{
+										turn(Turn::kLeft);
+										turn(Turn::kLeft);
+										move();
+										turn(Turn::kRight);
+										move();
+									}
+									else
+									{
+										move();
+										unresolved = false;
+										solving = false;
+									}
+								}
+							}
+							else
+							{
+								move();
+								unresolved = false;
+								solving = false;
+							}
+						}
+						else
+						{
+							move();
+							unresolved = false;
+							solving = false;
+						}
+					}
+					else //found opening in new right side of hall
+					{
+						turn(Turn::kRight);
+						move();
+
+						if (!movable(look(Turn::kForward)))
+						{
+							if (!movable(look(Turn::kLeft)))
+							{
+								turn(Turn::kLeft);
+								turn(Turn::kLeft);
+								move();
+
+								if (!movable(look(Turn::kForward)))
+								{
+									turn(Turn::kRight);
+									move();
+								}
+								else
+								{
+									move();
+
+									if (!movable(look(Turn::kForward)))
+									{
+										turn(Turn::kLeft);
+										turn(Turn::kLeft);
+										move();
+										turn(Turn::kLeft);
+										move();
+									}
+									else
+									{
+										move();
+										unresolved = false;
+										solving = false;
+									}
+								}
+							}
+							else
+							{
+								move();
+								unresolved = false;
+								solving = false;
+							}
+						}
+						else
+						{
+							move();
+							unresolved = false;
+							solving = false;
+						}
+					}
 				}
-			} */
-			default:
+				break;
+			} 
+			default: //elephant has no obstacle in its way
 			{
-				stuck = false;
+				solving = false;
 				break;
 			}
 			}
