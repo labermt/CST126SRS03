@@ -46,7 +46,7 @@ void Elephant::findHerd()
 			eat();
 		}
 
-		if(isSleepy()) //this should be all we need to make the elephant sleep when it has been awake too long
+		if(isSleepy())
 		{
 			sleep();
 		}
@@ -63,16 +63,6 @@ void Elephant::findHerd()
 					turn(Turn::kRight);
 					move();
 				}
-				//can be replaced with isStuck() \/
-				/*else if(movable(look(Turn::kForward)))
-				{
-					move();
-				}
-				else
-				{
-					turn(Turn::kLeft);
-					move();
-				}*/
 				else
 				{
 					turn(Turn::kRight);
@@ -86,26 +76,14 @@ void Elephant::findHerd()
 					turn(Turn::kLeft);
 					move();
 				}
-				//can be replaced with isStuck() \/
-				/*else if (movable(look(Turn::kForward)))
-				{
-					move();
-				}
-				else
-				{
-					turn(Turn::kRight);
-					move();
-				}*/
 				else
 				{
 					turn(Turn::kLeft);
 					isStuck();
 				}
 			}
-			else //Herd is not left or right
+			else //Herd is not left or right. Herd is behind elephant, elephant turns around
 			{
-				//Herd is behind Elephant 
-
 					turn(Turn::kLeft);
 					turn(Turn::kLeft);
 			}
@@ -116,17 +94,6 @@ void Elephant::findHerd()
 			{
 				move();
 			}
-			//else isStuck() can replace this \/
-			/*else if(movable(look(Turn::kRight)))
-			{
-				turn(Turn::kRight);
-				move();
-			}
-			else if(movable(look(Turn::kLeft)))
-			{
-				turn(Turn::kLeft);
-				move();
-			}*/
 			else
 			{
 				isStuck();
