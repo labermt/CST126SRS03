@@ -10,6 +10,7 @@ bool movable(Preserve::Feature const terrain)
 	case Preserve::Feature::kUnknown:
 	case Preserve::Feature::kRock:
 	case Preserve::Feature::kBrush:
+		result = false;
 		break;
 
 	case Preserve::Feature::kDirt:
@@ -20,7 +21,7 @@ bool movable(Preserve::Feature const terrain)
 		break;
 
 	default:
-		assert(false);
+		result = false;
 		break;
 	}
 	return result;
@@ -29,12 +30,12 @@ bool movable(Preserve::Feature const terrain)
 void Elephant::findHerd()
 {
 	auto found_heard = false;
-	if(look() == Preserve::Feature::kHerd)
+	if (look() == Preserve::Feature::kHerd)
 	{
 		found_heard = true;
 	}
-	
-	while(!found_heard)
+
+	while (!found_heard)
 	{
 		if (isThirsty() && look() == Preserve::Feature::kWater)
 		{
@@ -46,15 +47,15 @@ void Elephant::findHerd()
 			eat();
 		}
 
-		if(isSleepy()) //this should be all we need to make the elephant sleep when it has been awake too long
+		if (isSleepy())
 		{
 			sleep();
 		}
 
 		auto const herd_dir = listen();
 		auto const heading = getHeading(Turn::kForward);
-		
-		if (heading != herd_dir) //Elephant listens and if not heading herd_dir, turns and moves to herd_dir
+
+		if (heading != herd_dir)
 		{
 			if (getHeading(Turn::kRight) == herd_dir)
 			{
@@ -63,16 +64,6 @@ void Elephant::findHerd()
 					turn(Turn::kRight);
 					move();
 				}
-				//can be replaced with isStuck() \/
-				/*else if(movable(look(Turn::kForward)))
-				{
-					move();
-				}
-				else
-				{
-					turn(Turn::kLeft);
-					move();
-				}*/
 				else
 				{
 					turn(Turn::kRight);
@@ -86,47 +77,24 @@ void Elephant::findHerd()
 					turn(Turn::kLeft);
 					move();
 				}
-				//can be replaced with isStuck() \/
-				/*else if (movable(look(Turn::kForward)))
-				{
-					move();
-				}
-				else
-				{
-					turn(Turn::kRight);
-					move();
-				}*/
 				else
 				{
 					turn(Turn::kLeft);
 					isStuck();
 				}
 			}
-			else //Herd is not left or right
-			{
-				//Herd is behind Elephant 
-
-					turn(Turn::kLeft);
-					turn(Turn::kLeft);
-			}
-		}
-		else //Moving towards herd already
-		{
-			if(movable(look(Turn::kForward)))
-			{
-				move();
-			}
-			//else isStuck() can replace this \/
-			/*else if(movable(look(Turn::kRight)))
-			{
-				turn(Turn::kRight);
-				move();
-			}
-			else if(movable(look(Turn::kLeft)))
+			else
 			{
 				turn(Turn::kLeft);
+				turn(Turn::kLeft);
+			}
+		}
+		else
+		{
+			if (movable(look(Turn::kForward)))
+			{
 				move();
-			}*/
+			}
 			else
 			{
 				isStuck();
@@ -152,15 +120,15 @@ void Elephant::isStuck()
 
 		auto solving = false;
 
-		if (!movable(look(Turn::kForward))) //confirms initial obstacle and/or post solve obstacle
+		if (!movable(look(Turn::kForward)))
 		{
-			if (getHeading(Turn::kForward) != listen()) //checks that obstacle is actually blocking elephants path to the herd
+			if (getHeading(Turn::kForward) != listen())
 			{
 				stuck = false;
 			}
 			else
 			{
-				resolve = wall; //moves to resolve case wall
+				resolve = wall;
 
 				solving = stuck;
 			}
@@ -178,27 +146,27 @@ void Elephant::isStuck()
 			{
 				if (!movable(look(Turn::kLeft)) || !movable(look(Turn::kRight)))
 				{
-					resolve = diagonal; //might be a diagonal, moves to diagonal case
+					resolve = diagonal;
 				}
-				else //is a wall
+				else
 				{
 					auto unresolved = true;
 
 					turn(Turn::kRight);
 					move();
 
-					while (unresolved) //loop to follow wall until reaching an opening
+					while (unresolved)
 					{
-						if (!movable(look(Turn::kLeft)) && movable(look(Turn::kForward))) //no opening in wall
+						if (!movable(look(Turn::kLeft)) && movable(look(Turn::kForward)))
 						{
 							move();
 						}
-						else if (!movable(look(Turn::kLeft)) && !movable(look(Turn::kForward))) //hit a corner
+						else if (!movable(look(Turn::kLeft)) && !movable(look(Turn::kForward)))
 						{
 							resolve = diagonal;
 							unresolved = false;
 						}
-						else //opening in wall reached
+						else
 						{
 							turn(Turn::kLeft);
 							move();
@@ -223,11 +191,11 @@ void Elephant::isStuck()
 			{
 				if (!movable(look(Turn::kLeft)) && !movable(look(Turn::kRight)))
 				{
-					resolve = hall; //not just a diagonal, moves to hall case
+					resolve = hall;
 				}
-				else //is a diagonal
+				else
 				{
-					if (!movable(look(Turn::kLeft))) //can move right
+					if (!movable(look(Turn::kLeft)))
 					{
 						auto unresolved = true;
 
@@ -238,7 +206,7 @@ void Elephant::isStuck()
 								turn(Turn::kRight);
 								move();
 
-								if (!movable(look(Turn::kLeft))) //wall
+								if (!movable(look(Turn::kLeft)))
 								{
 									turn(Turn::kLeft);
 									resolve = wall;
@@ -258,7 +226,7 @@ void Elephant::isStuck()
 							}
 						}
 					}
-					else //can move left
+					else
 					{
 						auto unresolved = true;
 
@@ -269,7 +237,7 @@ void Elephant::isStuck()
 								turn(Turn::kLeft);
 								move();
 
-								if (!movable(look(Turn::kRight))) //wall
+								if (!movable(look(Turn::kRight)))
 								{
 									turn(Turn::kRight);
 									resolve = wall;
@@ -296,13 +264,13 @@ void Elephant::isStuck()
 			{
 				auto unresolved = true;
 
-				turn(Turn::kLeft); //turns around moves out of end of hall dead end
+				turn(Turn::kLeft);
 				turn(Turn::kLeft);
 				move();
 
 				while (unresolved)
 				{
-					if (!movable(look(Turn::kLeft)) && !movable(look(Turn::kRight))) //continuous hall on both sides
+					if (!movable(look(Turn::kLeft)) && !movable(look(Turn::kRight)))
 					{
 						if (!movable(look(Turn::kForward)))
 						{
@@ -313,14 +281,14 @@ void Elephant::isStuck()
 							move();
 						}
 					}
-					else if (movable(look(Turn::kLeft))) //found opening in new left side of hall
+					else if (movable(look(Turn::kLeft)))
 					{
 						turn(Turn::kLeft);
 						move();
 
 						if (!movable(look(Turn::kForward)))
 						{
-							if(!movable(look(Turn::kRight)))
+							if (!movable(look(Turn::kRight)))
 							{
 								turn(Turn::kLeft);
 								turn(Turn::kLeft);
@@ -365,7 +333,7 @@ void Elephant::isStuck()
 							solving = false;
 						}
 					}
-					else //found opening in new right side of hall
+					else
 					{
 						turn(Turn::kRight);
 						move();
@@ -419,8 +387,8 @@ void Elephant::isStuck()
 					}
 				}
 				break;
-			} 
-			default: //elephant has no obstacle in its way
+			}
+			default:
 			{
 				solving = false;
 				break;
