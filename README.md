@@ -2,13 +2,18 @@
 Elephant
 
 
-Class ID: 
+Class ID: Ninetales and Hipopotas
 
 SRS ID: CST126SRS03
 
 Unresolved Issues: 
+Elephant is able to find herd but may get stuck under certain circumstances.
 
 Notes: 
+Elephant will not actively look for food or water. The elephant will drink water or eat grass if it happens to be sitting on it. 
+Elephant will not be able to find herd if it is surrounded by rocks or other obstructions. 
+Elephant will not necessarily turn the most efficient way to find herd. 
+
 
 ---
 
