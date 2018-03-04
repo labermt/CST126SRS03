@@ -3,7 +3,7 @@
 #include <type_traits>
 #include "gps.h"
 
-class Elephant;
+class Loxodonta;
 
 class Preserve
 {
@@ -21,6 +21,8 @@ public:
 
 private:
 	Feature feature_[10][10];
+
+public:
 	static constexpr auto latExtent{ std::extent<decltype(Preserve::feature_), GPS::Coordinate::kLat>::value };
 	static constexpr auto lngExtent{ std::extent<decltype(Preserve::feature_), GPS::Coordinate::kLng>::value };
 
@@ -37,6 +39,9 @@ public:
 		return instance;
 	}
 
+public:
+	static bool isObstacle(const Feature feature);
+
 private:
 	Feature getFeature(int lat, int lng) const;
 	void setFeature(const int lat, const int lng, const Feature feature);
@@ -45,6 +50,6 @@ private:
 public:
 	void killGrass(const GPS gps);
 	Feature getFeature(const GPS gps) const;
-	Feature getFeature(const Elephant& elephant) const;
-	int getHerdDirection(const Elephant& elephant) const;
+	Feature getFeature(const Loxodonta& loxodonta) const;
+	int getHerdDirection(const Loxodonta& loxodonta) const;
 };
