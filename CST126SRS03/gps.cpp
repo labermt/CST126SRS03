@@ -69,12 +69,16 @@ void GPS::move(const int direction, const unsigned distance)
 
 int GPS::theta(const int x, const int y)
 {
-	int result = kNorth;
+	int result = 0;
 	if (x == 0)
 	{
 		if (y < 0)
 		{
-			result = kSouth;
+			result = 270;
+		}
+		else if (y > 0)
+		{
+			result = 90;
 		}
 	}
 	else

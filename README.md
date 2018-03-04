@@ -6,7 +6,7 @@ Class ID: Tentacool
 
 SRS ID: CST126SRS03
 
-Unresolved Issues: 
+Unresolved Issues: No issues
 
 Notes: 
 

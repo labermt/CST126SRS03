@@ -90,7 +90,7 @@ void Loxodonta::decrementWater(const unsigned liters)
 	{
 		water = 0;
 	}
-	water_ -= water;
+	water_ = water;
 }
 
 void Loxodonta::decrementWeight(const unsigned kg)

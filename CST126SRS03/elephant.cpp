@@ -13,14 +13,18 @@ void Elephant::findHerd()
 	
 	while (!herdFound)
 	{
-		faceHerd();
+
+		//if on top of herd
 		if (look() == Preserve::Feature::kHerd)
 		{
 			herdFound = true;
 		}
 
+		//Faces in the direction of the herd
+		faceHerd();
+
 		//Thirsty Elephant
-		if (isThirsty() && look() == Preserve::Feature::kWater)
+		if (isThirsty() || getWater() <= 70 && look() == Preserve::Feature::kWater)
 		{
 			drink();
 		}
@@ -36,32 +40,28 @@ void Elephant::findHerd()
 			sleep();
 		}
 
-		//Moving Forward
-		if (look(Turn::kForward) != Preserve::Feature::kRock || look(Turn::kForward) != Preserve::Feature::kUnknown)
+		//If forward is not blocked
+		if (look(Turn::kForward) != Preserve::Feature::kRock &&  look(Turn::kForward) != Preserve::Feature::kBrush &&  look(Turn::kForward) != Preserve::Feature::kUnknown)
 		{
 			move();
 		}
-		//Moving Left if Forward is blocked
-		else if (look(Turn::kForward) == Preserve::Feature::kRock || look(Turn::kForward) == Preserve::Feature::kUnknown &&
-			     look(Turn::kLeft) != Preserve::Feature::kRock || look(Turn::kLeft) != Preserve::Feature::kUnknown)
-		{
-			turn(Turn::kLeft);
-			move();
-		}
-		//Moving Right if Forward and Left is blocked
-		else if (look(Turn::kForward) == Preserve::Feature::kRock || look(Turn::kForward) == Preserve::Feature::kUnknown &&
-			look(Turn::kLeft) == Preserve::Feature::kRock || look(Turn::kLeft) == Preserve::Feature::kUnknown &&
-			look(Turn::kLeft) != Preserve::Feature::kRock || look(Turn::kLeft) != Preserve::Feature::kUnknown)
-		{
+		//If forward is blocked but right is not
+		else if (look(Turn::kRight) != Preserve::Feature::kRock &&  look(Turn::kRight) != Preserve::Feature::kBrush &&  look(Turn::kRight) != Preserve::Feature::kUnknown) {
 			turn(Turn::kRight);
 			move();
 		}
-		else
-		{
+		//If forward and right are blocked but left is not
+		else if (look(Turn::kLeft) != Preserve::Feature::kRock &&  look(Turn::kLeft) != Preserve::Feature::kBrush &&  look(Turn::kLeft) != Preserve::Feature::kUnknown) {
+			turn(Turn::kLeft);
+			move();
+		}
+		//All blocked, turn around
+		else {
 			turn(Turn::kLeft);
 			turn(Turn::kLeft);
 			move();
 			turn(Turn::kRight);
+			move();
 		}
 	}
 }

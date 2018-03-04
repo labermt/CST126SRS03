@@ -9,15 +9,15 @@ Preserve::Preserve() :
 	feature_
 {
 	{ Feature::kRock, Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock, Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock },
-{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kDirt,  Feature::kRock },
-{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kDirt,  Feature::kBrush, Feature::kDirt,  Feature::kDirt,  Feature::kRock },
-{ Feature::kRock, Feature::kDirt,  Feature::kBrush, Feature::kDirt,  Feature::kDirt, Feature::kRock,  Feature::kWater, Feature::kDirt,  Feature::kDirt,  Feature::kRock },
-{ Feature::kRock, Feature::kWater, Feature::kDirt,  Feature::kRock,  Feature::kDirt, Feature::kBrush, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kRock },
-{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kRock,  Feature::kRock },
-{ Feature::kRock, Feature::kBrush, Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kDirt,  Feature::kRock },
-{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kWater, Feature::kDirt,  Feature::kDirt,  Feature::kBrush, Feature::kRock },
-{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kRock },
-{ Feature::kRock, Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock, Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock }
+	{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kDirt,  Feature::kRock },
+	{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kDirt,  Feature::kBrush, Feature::kDirt,  Feature::kDirt,  Feature::kRock },
+	{ Feature::kRock, Feature::kDirt,  Feature::kBrush, Feature::kDirt,  Feature::kDirt, Feature::kRock,  Feature::kWater, Feature::kDirt,  Feature::kDirt,  Feature::kRock },
+	{ Feature::kRock, Feature::kWater, Feature::kDirt,  Feature::kRock,  Feature::kDirt, Feature::kBrush, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kRock },
+	{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kRock,  Feature::kRock },
+	{ Feature::kRock, Feature::kBrush, Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kDirt,  Feature::kRock },
+	{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kWater, Feature::kDirt,  Feature::kDirt,  Feature::kBrush, Feature::kRock },
+	{ Feature::kRock, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kDirt, Feature::kDirt,  Feature::kDirt,  Feature::kDirt,  Feature::kWater, Feature::kRock },
+	{ Feature::kRock, Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock, Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock,  Feature::kRock }
 }, // TODO: Generate?
 herd_(1, 5)
 {
@@ -33,6 +33,7 @@ Preserve::Feature Preserve::getFeature(const int lat, const int lng) const
 
 		const auto herdLat{ herd_.getlat() };
 		const auto herdLng{ herd_.getlng() };
+
 		if (lat == herdLat && lng == herdLng)
 		{
 			result = Feature::kHerd;
