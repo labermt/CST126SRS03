@@ -2,11 +2,13 @@
 Elephant
 
 
-Class ID: 
+Class ID: Seadra and Mespirit
 
 SRS ID: CST126SRS03
 
-Unresolved Issues: 
+Unresolved Issues: Elephant cant reach herd if there is no path to the herd then program will enter infinate loop.
+					Infinate loop is caused if rock is to the east of the herd, and south of the herd, when elephant approaches from the east. (reciprical also causes loop)
+
 
 Notes: 
 
