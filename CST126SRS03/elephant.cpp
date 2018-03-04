@@ -60,16 +60,13 @@ void Elephant::moveTowardsHerd()
 	faceHerd();
 
 	//detect if obstacles are in front of elephant
-	if (look(Turn::kForward) == Preserve::Feature::kRock ||
-		look(Turn::kForward) == Preserve::Feature::kBrush)
+	if (check(Turn::kForward))
 	{
 		//Check obstacle left
-		if (look(Turn::kLeft) == Preserve::Feature::kRock ||
-			look(Turn::kLeft) == Preserve::Feature::kBrush)
+		if (check(Turn::kLeft))
 		{
 			//check obstacle right
-			if (look(Turn::kRight) == Preserve::Feature::kRock ||
-				look(Turn::kRight) == Preserve::Feature::kBrush)
+			if (check(Turn::kRight))
 			{
 				//elephant is stuck in a U
 				//move out of U to the right
@@ -77,40 +74,64 @@ void Elephant::moveTowardsHerd()
 
 				turn(Turn::kRight);
 				turn(Turn::kRight);
-				move();
+				safeMove();
 				turn(Turn::kRight);
-				move();
-				move();
+				safeMove();
+				safeMove();
 				turn(Turn::kLeft);
-				move();
+				safeMove();
 			}
 			else
 			{
 				turn(Turn::kRight);
-				move();
+				safeMove();
 				turn(Turn::kLeft);
-				move();
-				move();
+				safeMove();
+				safeMove();
 				turn(Turn::kLeft);
-				move();
+				safeMove();
 			}
 		}
 		else
 		{
 			//move around object in front
 			turn(Turn::kLeft);
-			move();
+			safeMove();
 			turn(Turn::kRight);
-			move();
-			move();
+			safeMove();
+			safeMove();
 			turn(Turn::kRight);
-			move();
+			safeMove();
 		}
 
 	}
 	else
 	{
 		//no obstacles, just move forward
+		move();
+	}
+}
+
+bool Elephant::check(Turn x)
+{
+	if (look(x) == Preserve::Feature::kRock ||
+		look(x) == Preserve::Feature::kBrush) {
+		
+		return true;
+	}
+	else {
+		return false;
+	}
+
+
+}
+
+void Elephant::safeMove()
+{
+	if (check(Turn::kForward)) {
+
+	}
+	else {
 		move();
 	}
 }
