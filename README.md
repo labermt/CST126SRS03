@@ -6,7 +6,7 @@ Class ID: Spearow and Spheal
 
 SRS ID: CST126SRS03
 
-Unresolved Issues: 
+Unresolved Issues: No issue.
 
 Notes: 
 This is only compiled in Window 10.
