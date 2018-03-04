@@ -9,7 +9,7 @@ SRS ID: CST126SRS03
 Unresolved Issues: 
 
 Notes: 
-This is only compiled in win 10.
+This is only compiled in Window 10.
 
 
 ---
