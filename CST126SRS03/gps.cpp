@@ -30,7 +30,7 @@ void GPS::move(const int direction, const unsigned distance)
 	switch (distance)
 	{
 	case 0:
-	break;
+		break;
 
 	case 1:
 	{
@@ -63,7 +63,7 @@ void GPS::move(const int direction, const unsigned distance)
 
 	default:
 		assert(false);
-	break;
+		break;
 	}
 }
 
