@@ -129,7 +129,7 @@ Preserve::Feature Preserve::getFeature(const int lat, const int lng) const
 			result = Feature::kHerd;
 		}
 	}
-
+	
 	return result;
 }
 

@@ -300,3 +300,4 @@ void Loxodonta::faceHerd()
 		assert(false);
 	}
 }
+
