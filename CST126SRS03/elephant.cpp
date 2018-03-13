@@ -36,7 +36,7 @@ struct DirectionToHead
 
 void determineObstacles(Brain& memory);
 bool determineIfCanMoveInTheDirectionWeWantTo(int directionWeWantToHead, Brain &memory, DirectionToHead &directionToHead);
-Preserve::Feature lookBehindMe(GPS* gps, Direction heading);
+Preserve::Feature lookBehindMe(const GPS* const gps, Direction heading);
 bool isWaterNearMe(Brain& memory);
 bool isBrushNearMe(Brain& memory);
 bool isGrassNearMe(Brain& memory);
@@ -56,7 +56,7 @@ void Elephant::findHerd()
 
 	memory.currentDirection = getHeading(Turn::k0);
 
-	do
+	do // Reconsider using do while loops. They are not ideal for nearly all circumstances, especially here. 
 	{
 		// listen for herd to find direction
 		memory.directionOfHerd = listen();
@@ -128,9 +128,13 @@ void Elephant::findHerd()
 		else if (isHungry() && (memory.brushNearMe || memory.grassNearMe))
 		{
 			if (memory.featureRightOfMe == Preserve::Feature::kGrass || memory.featureRightOfMe == Preserve::Feature::kBrush)
+			{  // braces are a good idea even if there's only one statement. 
 				turn(Turn::kRight);
+			}
 			else if (memory.featureLeftOfMe == Preserve::Feature::kGrass || memory.featureLeftOfMe == Preserve::Feature::kBrush)
+			{
 				turn(Turn::kLeft);
+			}
 
 			if (memory.grassNearMe)
 			{
@@ -139,7 +143,7 @@ void Elephant::findHerd()
 			}
 			else
 			{
-				do
+				do // Avoid using do while loops. Prefer while loops. 
 				{
 					eat();
 				} while (getWeight() < getMaxWeight());
@@ -231,6 +235,7 @@ void determineObstacles(Brain& memory)
 	case Preserve::Feature::kBrush:
 		memory.obstacleInFrontOfMe = true;
 		break;
+
 	default:
 		break;
 	}
@@ -241,6 +246,7 @@ void determineObstacles(Brain& memory)
 	case Preserve::Feature::kBrush:
 		memory.obstacleRightOfMe = true;
 		break;
+
 	default:
 		break;
 	}
@@ -251,6 +257,7 @@ void determineObstacles(Brain& memory)
 	case Preserve::Feature::kBrush:
 		memory.obstacleLeftOfMe = true;
 		break;
+
 	default:
 		break;
 	}
@@ -261,6 +268,7 @@ void determineObstacles(Brain& memory)
 	case Preserve::Feature::kBrush:
 		memory.obstacleBehindMe = true;
 		break;
+
 	default:
 		break;
 	}
@@ -285,16 +293,20 @@ bool determineIfCanMoveInTheDirectionWeWantTo(const int directionWeWantToHead, B
 		{
 		case kNorth:
 			directionToHead.keepHeadingForward = true;
-			return !memory.obstacleInFrontOfMe;
+			return !memory.obstacleInFrontOfMe; // Consider not having multiple returns. 
+
 		case kWest:
 			directionToHead.turnLeft = true;
 			return !memory.obstacleLeftOfMe;
+
 		case kSouth:
 			directionToHead.uTurn = true;
 			return !memory.obstacleBehindMe;
+
 		case kEast:
 			directionToHead.turnRight = true;
 			return !memory.obstacleRightOfMe;
+
 		default:
 			break;
 		}
@@ -306,16 +318,21 @@ bool determineIfCanMoveInTheDirectionWeWantTo(const int directionWeWantToHead, B
 		case kNorth:
 			directionToHead.turnRight = true;
 			return !memory.obstacleRightOfMe;
+
 		case kWest:
 			directionToHead.keepHeadingForward = true;
 			return !memory.obstacleInFrontOfMe;
+
 		case kSouth:
 			directionToHead.turnLeft = true;
 			return !memory.obstacleLeftOfMe;
+
 		case kEast:
 			directionToHead.uTurn = true;
 			return !memory.obstacleBehindMe;
+
 		default:
+			assert(false); // Is this possible?
 			break;
 		}
 		break;
@@ -326,15 +343,19 @@ bool determineIfCanMoveInTheDirectionWeWantTo(const int directionWeWantToHead, B
 		case kNorth:
 			directionToHead.uTurn = true;
 			return !memory.obstacleBehindMe;
+
 		case kWest:
 			directionToHead.turnLeft = true;
 			return !memory.obstacleLeftOfMe;
+
 		case kSouth:
 			directionToHead.keepHeadingForward = true;
 			return !memory.obstacleInFrontOfMe;
+
 		case kEast:
 			directionToHead.turnRight = true;
 			return !memory.obstacleRightOfMe;
+
 		default:
 			break;
 		}
@@ -346,15 +367,19 @@ bool determineIfCanMoveInTheDirectionWeWantTo(const int directionWeWantToHead, B
 		case kNorth:
 			directionToHead.turnLeft = true;
 			return !memory.obstacleLeftOfMe;
+
 		case kWest:
 			directionToHead.uTurn = true;
 			return !memory.obstacleBehindMe;
+
 		case kSouth:
 			directionToHead.turnRight = true;
 			return !memory.obstacleRightOfMe;
+
 		case kEast:
 			directionToHead.keepHeadingForward = true;
 			return !memory.obstacleInFrontOfMe;
+
 		default:
 			break;
 		}
@@ -365,7 +390,7 @@ bool determineIfCanMoveInTheDirectionWeWantTo(const int directionWeWantToHead, B
 	return false;
 }
 
-Preserve::Feature lookBehindMe(GPS* gps, const Direction heading)
+Preserve::Feature lookBehindMe(const GPS* const gps, const Direction heading)
 {
 	auto result{ Preserve::Feature::kUnknown };
 
