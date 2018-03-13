@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include <cassert>
 #include "gps.h"
 #include "preserve.h"
@@ -33,6 +33,7 @@ bool canMove(Preserve::Feature const terrain)
 
 	return result;
 }
+
 void Elephant::tag( GPS& gps)
 {
 	setGps(gps);
@@ -60,7 +61,7 @@ void Elephant::findHerd()
 		{
 			eat();
 		}
-		else if (look() == Preserve::Feature::kWater)
+		else if (look() == Preserve::Feature::kWater) // look() is invariant. 
 		{
 			drink();
 		}
