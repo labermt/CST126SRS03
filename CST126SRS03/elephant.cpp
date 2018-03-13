@@ -21,7 +21,7 @@ void Elephant::findHerd()
 			drink();
 		}
 
-		if (featureFound != Preserve::Feature::kWater && isSleepy())
+		if (/* featureFound != Preserve::Feature::kWater && */ isSleepy()) // Might like to consider sleeping other places as well.
 		{
 			sleep();
 		}
