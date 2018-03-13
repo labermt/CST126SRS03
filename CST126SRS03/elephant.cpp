@@ -12,18 +12,23 @@ void Elephant::findHerd()
 
 	while (!herdfound)
 	{
-		int hortonHearsaWho = listen();
+		const int hortonHearsaWho = listen(); // Learn to use const. 
 
 		switch (hortonHearsaWho)
 		{
 		case (0):
 			turn(Turn::kForward);
 			break;
+
 		case (270):
 			turn(Turn::kLeft);
 			break;
+
 		case (90):
 			turn(Turn::kRight);
+			break;
+
+		default: // Or assert. Let the reader know you didn't forget the default case. 
 			break;
 		}
 
@@ -40,20 +45,25 @@ void Elephant::findHerd()
 			{
 			case Preserve::Feature::kUnknown:
 				break;
+
 			case Preserve::Feature::kHerd:
-				herdfound = true;
+				herdfound = true;//??? break ???
 			case Preserve::Feature::kDirt:
 				move();
 				//findHerd();
 				break;
+
 			case Preserve::Feature::kRock:
 				break;
+
 			case Preserve::Feature::kBrush:
 				break;
+
 			case Preserve::Feature::kGrass:
 				move();
 				eat();
 				break;
+
 			case Preserve::Feature::kWater:
 				move();
 				drink();
@@ -65,22 +75,28 @@ void Elephant::findHerd()
 		{
 		case Preserve::Feature::kUnknown:
 			break;
+
 		case Preserve::Feature::kHerd:
 			herdfound = true;
 			break;
+
 		case Preserve::Feature::kDirt:
 			move();
 			findHerd();
 			break;
+
 		case Preserve::Feature::kRock:
 			break;
+
 		case Preserve::Feature::kBrush:
 			break;
+
 		case Preserve::Feature::kGrass:
 			move();
 			eat();
 			findHerd();
 			break;
+
 		case Preserve::Feature::kWater:
 			move();
 			drink();
@@ -92,22 +108,28 @@ void Elephant::findHerd()
 		{
 		case Preserve::Feature::kUnknown:
 			break;
+
 		case Preserve::Feature::kHerd:
 			herdfound = true;
 			break;
+
 		case Preserve::Feature::kDirt:
 			move();
 			findHerd();
 			break;
+
 		case Preserve::Feature::kRock:
 			break;
+
 		case Preserve::Feature::kBrush:
 			break;
+
 		case Preserve::Feature::kGrass:
 			move();
 			eat();
 			findHerd();
 			break;
+
 		case Preserve::Feature::kWater:
 			move();
 			drink();
