@@ -5,6 +5,7 @@
 bool movable(Preserve::Feature const terrain)
 {
 	auto result = false;
+
 	switch (terrain)
 	{
 	case Preserve::Feature::kUnknown:
@@ -21,9 +22,11 @@ bool movable(Preserve::Feature const terrain)
 		break;
 
 	default:
+		assert(false);
 		result = false;
 		break;
 	}
+
 	return result;
 }
 
@@ -104,7 +107,6 @@ void Elephant::findHerd()
 		{
 			found_heard = true;
 		}
-
 	}
 }
 
@@ -187,11 +189,13 @@ void Elephant::isStuck()
 				}
 				break;
 			}
+
 			case diagonal:
 			{
 				if (!movable(look(Turn::kLeft)) && !movable(look(Turn::kRight)))
 				{
 					resolve = hall;
+					// Keep on going to the next case?
 				}
 				else
 				{
@@ -257,9 +261,11 @@ void Elephant::isStuck()
 							}
 						}
 					}
-					break;
+					break; // ??? 
 				}
+				// continue to the hall? Seems a bit complex. Try to the the logic flow normally when possible. 
 			}
+
 			case hall:
 			{
 				auto unresolved = true;
@@ -386,13 +392,14 @@ void Elephant::isStuck()
 						}
 					}
 				}
-				break;
 			}
+			break;
+
 			default:
 			{
 				solving = false;
-				break;
 			}
+			break; // Keep a break outside any nesting for readablity. 
 			}
 		}
 	}
