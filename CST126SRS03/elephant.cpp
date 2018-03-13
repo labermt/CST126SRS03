@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "preserve.h"
 #include "elephant.h"
-#include <cassert>
 
 void Elephant::tag(GPS& gps)
 {
@@ -14,12 +13,12 @@ void Elephant::findHerd()
 	{
 		healthCheck();
 
-		const auto hearDir = listen();
+		// Dead code: const auto hearDir = listen();
 		faceHerd();
 		auto see{ look(Turn::kForward) };
 		while (Preserve::isObstacle(see))
 		{
-			turn(Turn::kRight);
+			turn(Turn::kRight); // Always taking a right caused an infinite loop. 
 			see = look(Turn::kForward);
 		}
 		move();
