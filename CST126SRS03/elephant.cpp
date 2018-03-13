@@ -40,11 +40,13 @@ void Elephant::findHerd()
 				}
 			}
 		}
+
 		if (feature == Preserve::Feature::kWater)
 		{
 			drink();
 		}
-		constexpr auto sleepThreshhold{ 15 * 60 };
+
+		constexpr auto sleepThreshhold{ 15 * 60 }; // Nice. :-)
 		if (getAwake() > sleepThreshhold)
 		{
 			sleep();
