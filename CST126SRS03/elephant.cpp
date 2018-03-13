@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <cassert>
 #include "gps.h"
 #include "preserve.h"
 #include "elephant.h"
@@ -8,11 +9,13 @@
 bool canMove(Preserve::Feature const terrain)
 {
 	auto result = false;
+
 	switch (terrain)
 	{
 	case Preserve::Feature::kUnknown:
 	case Preserve::Feature::kRock:
 	case Preserve::Feature::kBrush:
+		result = false;
 		break;
 
 	case Preserve::Feature::kDirt:
@@ -23,9 +26,11 @@ bool canMove(Preserve::Feature const terrain)
 		break;
 
 	default:
+		assert(false);
 		result = false;
 		break;
 	}
+
 	return result;
 }
 void Elephant::tag( GPS& gps)
@@ -35,27 +40,36 @@ void Elephant::tag( GPS& gps)
 
 void Elephant::findHerd()
 {
-	auto foundHerd{ look() == Preserve::Feature::kHerd };
-
-	while (!foundHerd)
+	while (look() != Preserve::Feature::kHerd)
 	{
-		// Exit loop when herd is found
-		if (look() == Preserve::Feature::kHerd) foundHerd = true;
-
 		// Listen and turn towrard the herd
 		auto const herdHeading = GPS::cardinal(listen());
-		while (herdHeading != getHeading(Turn::kForward)) turn(Turn::kRight);
-			
+		while (herdHeading != getHeading(Turn::kForward))
+		{
+			turn(Turn::kRight);
+		}
+
 		// Check for brush in front of elephant
-		if (look(Turn::kForward) == Preserve::Feature::kBrush) eat();
+		if (look(Turn::kForward) == Preserve::Feature::kBrush)
+		{
+			eat();
+		}
 	
 		// Look at what elephant is standing on
-		if (look() == Preserve::Feature::kGrass) eat();
-			
-		else if (look() == Preserve::Feature::kWater) drink();
+		if (look() == Preserve::Feature::kGrass)
+		{
+			eat();
+		}
+		else if (look() == Preserve::Feature::kWater)
+		{
+			drink();
+		}
 
 		// Sleep if tired, and not in water (no killing elephant)
-		if (isSleepy() && look() != Preserve::Feature::kWater) sleep();
+		if (isSleepy() && look() != Preserve::Feature::kWater)
+		{
+			sleep();
+		}
 			
 		// Maneuver around obstacles
 		while (!canMove(look(Turn::kForward)))
@@ -66,7 +80,7 @@ void Elephant::findHerd()
 				move();
 				turn(Turn::kLeft);
 				
-				if(herdHeading != GPS::cardinal(listen()))
+				if (herdHeading != GPS::cardinal(listen()))
 				{
 					turn(Turn::kLeft);
 					move();
@@ -78,10 +92,14 @@ void Elephant::findHerd()
 			{
 				turn(Turn::kLeft);
 				move();
-				while(!canMove(look(Turn::kRight))) move();
+				while (!canMove(look(Turn::kRight))) // {} suggested on 
+				{
+					move();
+				}
 				turn(Turn::kRight);
 			}
 		}
-		move(); 
+		move();
 	}
 }
+// blank line added to end. Not required, some old utilties prefer it. Remember the assignement parsing cin when the last character isn't a '\n'?
