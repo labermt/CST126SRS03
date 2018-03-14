@@ -20,6 +20,12 @@ void Elephant::findHerd()
 		{
 			turn(Turn::kRight); // Always taking a right caused an infinite loop. 
 			see = look(Turn::kForward);
+			if (!Preserve::isObstacle(see))
+			{
+				move();
+				turn(Turn::kLeft);
+				see = look(Turn::kForward);
+			}
 		}
 		move();
 	}
