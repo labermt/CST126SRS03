@@ -21,7 +21,7 @@ void Elephant::findHerd()
 			break;
 
 		case (270):
-			turn(Turn::kLeft);
+			turn(Turn::kLeft); // I don't see why to turn left here. You don't know the elephant is facing kNorth.
 			break;
 
 		case (90):
@@ -37,7 +37,7 @@ void Elephant::findHerd()
 		auto toHortonsFront = look(Turn::kForward);
 		auto toHortonsRight = look(Turn::kRight);
 
-		//look based on 270,0, 90 and if there is no ob
+		// look based on 270,0, 90 and if there is no ob
 		
 		if (toHortonsLeft != Preserve::Feature::kUnknown)
 		{
@@ -50,7 +50,7 @@ void Elephant::findHerd()
 				herdfound = true;//??? break ???
 			case Preserve::Feature::kDirt:
 				move();
-				//findHerd();
+				// findHerd(); // Put a space after comment. Comments are for humans, help them read it. 
 				break;
 
 			case Preserve::Feature::kRock:
