@@ -2,7 +2,7 @@
 Elephant
 
 
-Class ID: 
+Class ID: Shelmet and Meowth
 
 SRS ID: CST126SRS03
 
