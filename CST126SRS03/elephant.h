@@ -15,5 +15,5 @@ public: // Student to implement methods:
 	void tag(GPS& gps);
 	void findHerd();
 	void moveTowardsHerd();
-	void survive(Preserve::Feature& feature);
+	void survive(const Preserve::Feature feature);
 };

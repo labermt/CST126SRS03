@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
-#include <iostream>
-#include "direction.h"
+//#include <iostream> // Unused.
+//#include "direction.h" // Unused.
 #include "gps.h"
 #include "preserve.h"
 #include "elephant.h"
@@ -16,13 +16,11 @@ void Elephant::findHerd()
 
 	while (!foundHerd)
 	{
-		//herd not found, search for herd
-		Preserve::Feature feature;
-
-		//Look in all directions for herd
-		const Turn turns[4] = { Turn::k0, Turn::kForward, Turn::kLeft , Turn::kRight };
-		for (Turn turn : turns) {
-			feature = look(turn);
+		// Look in all directions for herd
+		const Turn turns[] = { Turn::k0, Turn::kForward, Turn::kLeft , Turn::kRight }; // minor suggestion. Might be easier to maintain if you don't hardcode the size in case it changes.
+		for (Turn turn : turns) 
+		{ // consistent bracing style.
+			const Preserve::Feature feature{ look(turn) };
 
 			if (feature == Preserve::Feature::kHerd)
 			{
@@ -30,50 +28,65 @@ void Elephant::findHerd()
 				break;
 			}
 		}
-		if (foundHerd) break;
+		if (foundHerd)
+		{
+			break;
+		}
 		
-		//survive
-		feature = look();
+		// survive
+		const Preserve::Feature feature = look();
 		survive(feature);
 
-		//move!
+		// move!
 		moveTowardsHerd();
 	}
 }
 
-void Elephant::survive(Preserve::Feature& feature)
+void Elephant::survive(const Preserve::Feature feature) // parameter isn't changing and a reference is more expensive. 
 {
-	//Deal with hunger
-	if (isHungry() && feature == Preserve::Feature::kGrass) eat(); //eat grass
-	if (isHungry() && look(Turn::kForward) == Preserve::Feature::kBrush) eat(); //eat brush
+	// Deal with hunger // Note: Spaces after comment like so: // helps the human reader. //This is harder to read.
+	if (isHungry() && feature == Preserve::Feature::kGrass)
+	{
+		eat(); // eat grass // Comments like this a little obvious. Consider using comments more sparingly. 
+	}
+	if (isHungry() && look(Turn::kForward) == Preserve::Feature::kBrush)
+	{
+		eat(); // eat brush
+	}
 
-	//Deal with thirst
-	if (isThirsty() && feature == Preserve::Feature::kWater) drink();
+	// Deal with thirst
+	if (isThirsty() && feature == Preserve::Feature::kWater)
+	{
+		drink();
+	}
 
-	//Sleep if sleepy
-	if (isSleepy()) sleep();
+	// Sleep if sleepy
+	if (isSleepy())
+	{
+		sleep();
+	}
 }
 
 void Elephant::moveTowardsHerd()
 {
-	//Face towards herd
+	// Face towards herd
 	faceHerd();
 
-	//detect if obstacles are in front of elephant
+	// detect if obstacles are in front of elephant
 	if (look(Turn::kForward) == Preserve::Feature::kRock ||
 		look(Turn::kForward) == Preserve::Feature::kBrush)
 	{
-		//Check obstacle left
+		// Check obstacle left
 		if (look(Turn::kLeft) == Preserve::Feature::kRock ||
 			look(Turn::kLeft) == Preserve::Feature::kBrush)
 		{
-			//check obstacle right
+			// check obstacle right
 			if (look(Turn::kRight) == Preserve::Feature::kRock ||
 				look(Turn::kRight) == Preserve::Feature::kBrush)
 			{
-				//elephant is stuck in a U
-				//move out of U to the right
-				//may not work in all circumstances
+				// elephant is stuck in a U
+				// move out of U to the right
+				// may not work in all circumstances
 
 				turn(Turn::kRight);
 				turn(Turn::kRight);
@@ -97,7 +110,7 @@ void Elephant::moveTowardsHerd()
 		}
 		else
 		{
-			//move around object in front
+			// move around object in front
 			turn(Turn::kLeft);
 			move();
 			turn(Turn::kRight);
@@ -106,11 +119,10 @@ void Elephant::moveTowardsHerd()
 			turn(Turn::kRight);
 			move();
 		}
-
 	}
-	else
+	else// no obstacles
 	{
-		//no obstacles, just move forward
+		// just move forward 
 		move();
 	}
 }
