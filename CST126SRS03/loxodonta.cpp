@@ -4,7 +4,7 @@
 #include "preserve.h"
 #include "loxodonta.h"
 
-Loxodonta::Loxodonta(const unsigned weight, const Direction heading) :
+Loxodonta::Loxodonta(const unsigned weight, const Direction heading):
 	weight_{ weight }, heading_{ heading }, minWeight_{ weight - 200 }, maxWeight_{ weight + 100 }
 {
 }
@@ -171,6 +171,18 @@ Direction Loxodonta::getHeading() const
 	return result;
 }
 
+Direction Loxodonta::getHeading(const Turn turn) const
+{
+	const auto result{ GPS::cardinal(heading_ + getDirection(turn)) };
+	return result;
+}
+
+Direction Loxodonta::getHeading() const
+{
+	const auto result{ getHeading(Turn::kForward) };
+	return result;
+}
+
 Preserve::Feature Loxodonta::look(const Turn turn) const
 {
 	auto result{ Preserve::Feature::kUnknown };
@@ -267,6 +279,37 @@ void Loxodonta::move()
 		{
 			gps_->move(heading_, 1);
 		}
+	}
+}
+
+void Loxodonta::faceHerd()
+{
+	const Direction heading{ getHeading() };
+	const int herdDirection{ listen() };
+	const auto deltaAngle{ herdDirection - heading };
+
+	const auto deltaTheta = GPS::rangeTheta(deltaAngle);
+
+	if (deltaTheta >= 315 || deltaTheta < 45)
+	{
+		turn(Turn::kForward);
+	}
+	else if (deltaTheta >= 45 && deltaTheta < 135)
+	{
+		turn(Turn::kRight);
+	}
+	else if (deltaTheta >= 135 && deltaTheta < 225)
+	{
+		turn(Turn::kRight);
+		turn(Turn::kRight);
+	}
+	else if (deltaTheta >= 225 && deltaTheta < 315)
+	{
+		turn(Turn::kLeft);
+	}
+	else
+	{
+		assert(false);
 	}
 }
 

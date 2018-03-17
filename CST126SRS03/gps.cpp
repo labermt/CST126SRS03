@@ -5,7 +5,7 @@
 
 #include "gps.h"
 
-GPS::GPS(const int lat, const int lng) : lat_(lat), lng_(lng)
+GPS::GPS(const int lat, const int lng): lat_(lat), lng_(lng)
 {
 }
 

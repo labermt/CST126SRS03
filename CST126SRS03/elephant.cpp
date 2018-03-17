@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "elephant.h"
 #include <cassert>
+#include "elephant.h"
 
 void Elephant::tag(class GPS& gps)
 {
@@ -65,4 +65,3 @@ void Elephant::findHerd()
 		}
 	}
 }
-
