@@ -5,7 +5,7 @@
 #include "loxodonta.h"
 #include "preserve.h"
 
-Preserve::Preserve(): 
+Preserve::Preserve() :
 	feature_
 	{
 		{ Feature::kRock, Feature::kDirt, Feature::kDirt, Feature::kDirt, Feature::kGrass, Feature::kRock, Feature::kDirt, Feature::kDirt, Feature::kDirt, Feature::kWater, Feature::kRock, Feature::kDirt, Feature::kDirt, Feature::kDirt, Feature::kGrass, Feature::kRock, Feature::kDirt, Feature::kDirt, Feature::kDirt, Feature::kDirt, Feature::kBrush, Feature::kWater, Feature::kDirt, Feature::kWater, Feature::kWater, Feature::kBrush, Feature::kDirt, Feature::kGrass, Feature::kGrass, Feature::kGrass, Feature::kRock, Feature::kGrass, Feature::kGrass, Feature::kDirt, Feature::kDirt, Feature::kRock, Feature::kGrass, Feature::kGrass, Feature::kWater, Feature::kWater, Feature::kRock, Feature::kDirt, Feature::kDirt, Feature::kDirt, Feature::kDirt, Feature::kBrush, Feature::kGrass, Feature::kGrass, Feature::kWater, Feature::kDirt, Feature::kBrush, Feature::kDirt, Feature::kDirt, Feature::kDirt, Feature::kWater, Feature::kBrush, Feature::kDirt, Feature::kGrass, Feature::kGrass, Feature::kWater, Feature::kBrush, Feature::kDirt, Feature::kGrass, Feature::kDirt, Feature::kDirt, Feature::kBrush, Feature::kDirt, Feature::kDirt, Feature::kGrass, Feature::kWater, Feature::kRock, Feature::kDirt, Feature::kDirt, Feature::kDirt, Feature::kDirt, Feature::kRock, Feature::kGrass, Feature::kWater, Feature::kDirt, Feature::kGrass, Feature::kRock, Feature::kDirt, Feature::kGrass, Feature::kGrass, Feature::kDirt, Feature::kRock, Feature::kGrass, Feature::kDirt, Feature::kDirt, Feature::kDirt, Feature::kBrush, Feature::kDirt, Feature::kDirt, Feature::kDirt, Feature::kWater, Feature::kBrush, Feature::kGrass, Feature::kDirt, Feature::kGrass, Feature::kGrass },
@@ -185,7 +185,7 @@ int Preserve::getHerdDirection(const Loxodonta& loxodonta) const
 	{
 		const auto dx = herd_.getlng() - gpsPtr->getlng();
 		const auto dy = -(herd_.getlat() - gpsPtr->getlat());
-		const auto angle = 90- GPS::theta(dx, dy);
+		const auto angle = 90 - GPS::theta(dx, dy);
 		result = GPS::cardinal(angle); // TODO: Use cardinal compass coordinates?
 	}
 	return result;

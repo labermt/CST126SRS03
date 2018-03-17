@@ -90,7 +90,7 @@ void Loxodonta::decrementWater(const unsigned liters)
 	{
 		water = 0;
 	}
-	water_ -= water;
+	water_ = water;
 }
 
 void Loxodonta::decrementWeight(const unsigned kg)
@@ -108,7 +108,7 @@ void Loxodonta::decrementWeight(const unsigned kg)
 
 bool Loxodonta::isSleepy() const
 {
-	const auto result{ awake_ >= 60*kMaxAwake };
+	const auto result{ awake_ >= 60 * kMaxAwake };
 	return result;
 }
 
@@ -156,6 +156,18 @@ Direction Loxodonta::getDirection(const Turn turn)
 
 	const auto result{ GPS::cardinal(theta) };
 
+	return result;
+}
+
+Direction Loxodonta::getHeading(const Turn turn) const
+{
+	const auto result{ GPS::cardinal(heading_ + getDirection(turn)) };
+	return result;
+}
+
+Direction Loxodonta::getHeading() const
+{
+	const auto result{ getHeading(Turn::kForward) };
 	return result;
 }
 
@@ -267,6 +279,37 @@ void Loxodonta::move()
 		{
 			gps_->move(heading_, 1);
 		}
+	}
+}
+
+void Loxodonta::faceHerd()
+{
+	const Direction heading{ getHeading() };
+	const int herdDirection{ listen() };
+	const auto deltaAngle{ herdDirection - heading };
+
+	const auto deltaTheta = GPS::rangeTheta(deltaAngle);
+
+	if (deltaTheta >= 315 || deltaTheta < 45)
+	{
+		turn(Turn::kForward);
+	}
+	else if (deltaTheta >= 45 && deltaTheta < 135)
+	{
+		turn(Turn::kRight);
+	}
+	else if (deltaTheta >= 135 && deltaTheta < 225)
+	{
+		turn(Turn::kRight);
+		turn(Turn::kRight);
+	}
+	else if (deltaTheta >= 225 && deltaTheta < 315)
+	{
+		turn(Turn::kLeft);
+	}
+	else
+	{
+		assert(false);
 	}
 }
 

@@ -12,8 +12,8 @@ public:
 	GPS(const int lat, const int lng);
 
 private:
-	int lat_{-1};
-	int lng_{-1};
+	int lat_{ -1 };
+	int lng_{ -1 };
 
 public:
 	static int rangeTheta(const int theta);

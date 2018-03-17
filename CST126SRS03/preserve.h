@@ -19,7 +19,6 @@ public:
 		kWater    // Swim or drink
 	};
 
-private:
 	Feature feature_[100][100];
 
 public:
