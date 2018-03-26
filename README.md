@@ -2,13 +2,13 @@
 Elephant
 
 
-Class ID: 
+Class ID: Phantump, Sliggoo
 
 SRS ID: CST126SRS03
 
 Unresolved Issues: 
 
-Notes: 
+Notes:
 
 ---
 
